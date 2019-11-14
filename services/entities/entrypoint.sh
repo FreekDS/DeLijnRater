@@ -2,7 +2,7 @@
 
 echo "Wating for postgres on port 5432..."
 
-while ! nc -z users-db 5432; do
+while ! nc -z persistence-db 5432; do
 	sleep 0.1
 done
 
