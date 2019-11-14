@@ -1,0 +1,30 @@
+version: '3.6'
+
+services:
+    
+    entities:
+        build:
+            context: ./services/entities
+            dockerfile: Dockerfile
+        volumes:
+            - './services/entities:/usr/src/entities'
+        ports:
+            - 5001:5000
+        environment:
+            - FLASK_ENV=development
+            - APP_SETTINGS=project.config.DevelopmentConfig
+            - DATABASE_URL=postgres://postgres:postgres@users-db:5432/entities
+        depends_on:
+            - persistence-db
+            
+    
+    persistence-db:
+        build:
+            context: ./services/databases/persistence
+            dockerfile: Dockerfile
+        ports:
+            - 5435:5432
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            
