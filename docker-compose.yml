@@ -30,3 +30,18 @@ services:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=postgres
             
+    
+    web-ui:
+        build:
+            context: ./services/web-ui
+            dockerfile: Dockerfile
+        volumes:
+            - './services/web-ui:/usr/src/web-ui'
+            - '/usr/src/web-ui/node_modules'
+        ports:
+            - 3007:3000
+        environment:
+            - NODE_ENV=development
+            - REACT_APP_ENTITIES_SERVICE_URL=http://localhost
+        depends_on:
+            - entities
