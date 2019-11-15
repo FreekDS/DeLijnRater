@@ -10,6 +10,8 @@ services:
             - './services/entities:/usr/src/entities'
         ports:
             - 5001:5000
+        expose:
+            - '5000'
         environment:
             - FLASK_ENV=development
             - APP_SETTINGS=project.config.Config
@@ -43,5 +45,18 @@ services:
         environment:
             - NODE_ENV=development
             - REACT_APP_ENTITIES_SERVICE_URL=http://localhost
+            - CHOKIDAR_USEPOLLING=true
         depends_on:
             - entities
+            
+            
+    nginx:
+        build:
+            context: ./services/nginx
+            dockerfile: Dockerfile
+        restart: always
+        ports:
+            - 80:80
+        depends_on:
+            - entities
+            - web-ui
