@@ -62,7 +62,7 @@ def get_stop_data(debug=True) -> List[dict]:
     if debug:
         result = list()
         d = dict()
-        with open("dummy.txt") as f:
+        with open("./project/delijn/dummy-stops.txt") as f:
             for line in f:
                 line = line.strip()
                 if '{' == line:

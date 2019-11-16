@@ -1,6 +1,7 @@
 from flask.cli import FlaskGroup
 from project import create_app, db
 from project.delijn.stop_data import get_stop_data
+from project.delijn.vehicle_data import get_vehicle_data
 from project.models.Vehicle import Vehicle
 from project.models.Stop import Stop
 
@@ -8,7 +9,7 @@ app = create_app()
 cli = FlaskGroup(create_app=create_app)
 
 
-@cli.command()
+@cli.command('reset')
 def recreate_db():
     db.drop_all()
     db.create_all()
@@ -16,29 +17,40 @@ def recreate_db():
     print("Database recreated")
 
 
-@cli.command()
+def _add_vehicle_samples():
+    data = get_vehicle_data()
+    for v in data:
+        vehicle = Vehicle(id=v.get('id'), number=v.get('number'), description=v.get('description'),
+                          vehicle_type=v.get('type'), user_id=v.get('created_by'), name=v.get('name'))
+        db.session.add(vehicle)
+
+
+@cli.command("add_vehicles")
 def add_vehicle_samples():
+    _add_vehicle_samples()
+    db.session.commit()
     print("Added Vehicle samples")
 
 
-@cli.command()
-def add_stop_data():
+def _add_stop_data():
     data = get_stop_data()
-    from project.models.Stop import Region
-    data = [1]
     for s in data:
-        # stop = Stop(name=s.get('name'), region=s.get('region'), stop_number=s.get('number'), village=s.get('village'))
-        stop = Stop(name='Test', region=Region.ANTWERPEN, stop_number=7854, village='test village')
+        stop = Stop(name=s.get('name'), region=s.get('region'), stop_number=s.get('number'), village=s.get('village'))
         db.session.add(stop)
-        db.session.commit()
-        pass
+
+
+@cli.command('add_stops')
+def add_stop_data():
+    _add_stop_data()
+    db.session.commit()
     print("Added Stop samples")
 
 
-@cli.command()
-def seed_db():
-    add_vehicle_samples()
-    add_stop_data()
+@cli.command('fill_db')
+def fill_db():
+    _add_vehicle_samples()
+    _add_stop_data()
+    db.session.commit()
     print("Filled database")
 
 

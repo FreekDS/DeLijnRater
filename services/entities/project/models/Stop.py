@@ -38,7 +38,11 @@ class Stop(db.Model):
     stop_number = db.Column(db.Integer, nullable=False)
     village = db.Column(db.String(128), nullable=True)
 
-    def __init__(self, region: Region, name: str, stop_number: int, village: str) -> None:
+    def __init__(self, region: Region or int, name: str, stop_number: int, village: str) -> None:
+
+        if type(region) == int:
+            region = Region(region)
+            
         self.region = region
         self.name = name
         self.stop_number = stop_number
