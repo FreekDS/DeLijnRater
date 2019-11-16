@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_restful import Resource, Api
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import os
@@ -17,7 +16,11 @@ def create_app(script_info=None):
     from project.api import api_blueprint
     app.register_blueprint(api_blueprint)
 
-    db.init_app(app)
+    with app.app_context():
+        from project.models.Vehicle import Vehicle
+        from project.models.Stop import Stop
+        db.init_app(app)
+        db.create_all()
 
     @app.shell_context_processor
     def ctx():

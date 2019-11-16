@@ -8,10 +8,11 @@ class VehicleType(Enum):
 
 
 class Vehicle(db.Model):
-    __tablename__ = 'vehicle'
+    __tablename__ = 'vehicles'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     number = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text(), nullable=True)
+    name = db.Column(db.String(128), nullable=True)
     type = db.Column(db.Enum(VehicleType), nullable=False, default=VehicleType.BUS)
 
     def __init__(self, id, number, description, vehicle_type):

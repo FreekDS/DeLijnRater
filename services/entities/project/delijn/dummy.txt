@@ -1,0 +1,29 @@
+{
+region 1  
+number 101000  
+name  A. Chantrainestraat
+village Wilrijk  
+{
+region 1  
+number 101001  
+name  Zurenborg   
+village Antwerpen  
+}  
+{
+region 1  
+number 101002  
+name   Verenigde Natieslaan   
+village Hoboken  
+}  
+{
+region 1  
+number 101003  
+name  Verenigde Natieslaan   
+village Hoboken  
+}  
+{
+region 1  
+number 101004  
+name  D. Baginierlaan  
+village Hoboken  
+}

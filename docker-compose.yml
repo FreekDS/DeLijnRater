@@ -15,6 +15,7 @@ services:
         environment:
             - FLASK_ENV=development
             - APP_SETTINGS=project.config.Config
+            - DE_LIJN_API_KEY=b030c9338aa64c8592e79cfeee81581d
             - DATABASE_URL=postgres://postgres:postgres@persistence-db:5432/entities
         depends_on:
             - persistence-db
