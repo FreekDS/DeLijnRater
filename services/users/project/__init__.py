@@ -13,6 +13,9 @@ def create_app(script_info=None):
     app_settings = os.getenv('APP_SETTINGS')
     app.config.from_object(app_settings)
 
+    from project.api import api_blueprint
+    app.register_blueprint(api_blueprint)
+
     with app.app_context():
         from project.models.User import User
         db.init_app(app)

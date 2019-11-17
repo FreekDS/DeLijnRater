@@ -1,9 +1,8 @@
 from flask_restful import Resource, reqparse
 from flask import jsonify
 
-from project.api.general import create_error
 from project.models.Stop import Stop, Region
-from project.utils import try_convert
+from project.utils import try_convert, create_error
 
 
 def region_type(value):

@@ -1,7 +1,6 @@
 from flask_restful import Resource, reqparse
 from project.models.Vehicle import Vehicle, VehicleType
-from project.api.general import create_error
-from project.utils import try_convert
+from project.utils import try_convert, create_error
 from typing import Any
 from project import db
 
