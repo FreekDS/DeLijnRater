@@ -22,7 +22,7 @@ class VehicleRating(db.Model):
     vehicle_type = db.Column(db.Enum(VehicleType), nullable=False)
     vehicle_id = db.Column(db.Integer, nullable=False)
     created_by = db.Column(db.Integer, nullable=False)
-    rating = db.Column(db.Integer, nullable=False, default=0)
+    rating = db.Column(db.Float, nullable=False, default=0)
 
     def __init__(self, rating, vehicle_type: VehicleType, vehicle_id, created_by):
         self.vehicle_type = vehicle_type

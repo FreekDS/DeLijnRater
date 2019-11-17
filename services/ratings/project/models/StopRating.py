@@ -20,4 +20,3 @@ class StopRating(db.Model):
             'created_by': self.created_by,
             'rating': self.rating
         }
-
