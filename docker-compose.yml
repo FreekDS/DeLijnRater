@@ -1,63 +1,101 @@
 version: '3.6'
 
 services:
-    
-    entities:
-        build:
-            context: ./services/entities
-            dockerfile: Dockerfile
-        volumes:
-            - './services/entities:/usr/src/entities'
-        ports:
-            - 5001:5000
-        expose:
-            - '5000'
-        environment:
-            - FLASK_ENV=development
-            - APP_SETTINGS=project.config.Config
-            - DE_LIJN_API_KEY=b030c9338aa64c8592e79cfeee81581d
-            - DATABASE_URL=postgres://postgres:postgres@persistence-db:5432/entities
-        depends_on:
-            - persistence-db
-            
-    
-    persistence-db:
-        build:
-            context: ./services/databases/persistence
-            dockerfile: Dockerfile
-        ports:
-            - 5435:5432
-        expose:
-            - "5432"
-        environment:
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres
-            
-    
-    web-ui:
-        build:
-            context: ./services/web-ui
-            dockerfile: Dockerfile
-        volumes:
-            - './services/web-ui:/usr/src/web-ui'
-            - '/usr/src/web-ui/node_modules'
-        ports:
-            - 3007:3000
-        environment:
-            - NODE_ENV=development
-            - REACT_APP_ENTITIES_SERVICE_URL=http://localhost
-            - CHOKIDAR_USEPOLLING=true
-        depends_on:
-            - entities
-            
-            
-    nginx:
-        build:
-            context: ./services/nginx
-            dockerfile: Dockerfile
-        restart: always
-        ports:
-            - 80:80
-        depends_on:
-            - entities
-            - web-ui
+
+  entities:
+    build:
+      context: ./services/entities
+      dockerfile: Dockerfile
+    volumes:
+      - './services/entities:/usr/src/entities'
+    ports:
+      - 5001:5000
+    expose:
+      - '5000'
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.Config
+      - DE_LIJN_API_KEY=b030c9338aa64c8592e79cfeee81581d
+      - DATABASE_URL=postgres://postgres:postgres@persistence-db:5432/entities
+    depends_on:
+      - persistence-db
+
+
+  users:
+    build:
+      context: ./services/users
+      dockerfile: Dockerfile
+    volumes:
+      - './services/users:/usr/src/users'
+    ports:
+      - 5002:5003
+    expose:
+      - '5003'
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.Config
+      - DATABASE_URL=postgres://postgres:postgres@users-db:5431/users
+    depends_on:
+      - users-db
+
+
+
+  persistence-db:
+    build:
+      context: ./services/databases/persistence
+      dockerfile: Dockerfile
+    ports:
+      - 5435:5432
+    expose:
+      - "5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  users-db:
+    build:
+      context: ./services/databases/users
+      dockerfile: Dockerfile
+    ports:
+      - 5430:5431
+    expose:
+      - '5431'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    command:
+      # Change postgres port for this database
+      - "postgres"
+      - "-c"
+      - "port=5431"
+
+
+  web-ui:
+    build:
+      context: ./services/web-ui
+      dockerfile: Dockerfile
+    volumes:
+      - './services/web-ui:/usr/src/web-ui'
+      - '/usr/src/web-ui/node_modules'
+    ports:
+      - 3007:3000
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_ENTITIES_SERVICE_URL=http://localhost
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - entities
+      - users
+
+
+  nginx:
+    build:
+      context: ./services/nginx
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - entities
+      - users
+      - web-ui

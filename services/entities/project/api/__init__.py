@@ -3,6 +3,7 @@ from flask_restful import Api
 from project.api.stop_resources import AllStops, StopById, StopsByRegion
 from project.api.vehicle_resources import AllVehicles, VehicleById
 from project.api.general import *
+from project.api.doc import documentation_blueprint
 
 api_blueprint = Blueprint('api', __name__)
 api = Api(api_blueprint)

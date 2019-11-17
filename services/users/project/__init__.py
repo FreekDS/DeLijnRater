@@ -13,13 +13,8 @@ def create_app(script_info=None):
     app_settings = os.getenv('APP_SETTINGS')
     app.config.from_object(app_settings)
 
-    from project.api import api_blueprint, documentation_blueprint
-    app.register_blueprint(api_blueprint)
-    app.register_blueprint(documentation_blueprint)
-
     with app.app_context():
-        from project.models.Vehicle import Vehicle
-        from project.models.Stop import Stop
+        from project.models.User import User
         db.init_app(app)
         db.create_all()
         db.session.commit()
