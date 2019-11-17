@@ -21,6 +21,7 @@ def create_app(script_info=None):
         from project.models.Stop import Stop
         db.init_app(app)
         db.create_all()
+        db.session.commit()
 
     @app.shell_context_processor
     def ctx():

@@ -1,4 +1,4 @@
-from project.delijn.stop_data import convert
+from project.utils import try_convert
 from typing import List
 
 
@@ -14,7 +14,7 @@ def get_vehicle_data() -> List[dict]:
                 result.append(d.copy())
             else:
                 contents = line.split(' ', 1)
-                d[''.join(contents[0].split())] = convert(''.join(contents[1].split()))
+                d[''.join(contents[0].split())] = try_convert(''.join(contents[1].split()))
     return result
 
 if __name__ == '__main__':

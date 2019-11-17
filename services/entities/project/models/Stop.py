@@ -29,6 +29,10 @@ class Region(Enum):
                     result += char.lower()
         return result
 
+    @staticmethod
+    def get_key_value():
+        return {str(e) : e.value for e in Region}
+
 
 class Stop(db.Model):
     __tablename__ = 'stops'
@@ -39,11 +43,19 @@ class Stop(db.Model):
     village = db.Column(db.String(128), nullable=True)
 
     def __init__(self, region: Region or int, name: str, stop_number: int, village: str) -> None:
-
         if type(region) == int:
             region = Region(region)
-            
+
         self.region = region
         self.name = name
         self.stop_number = stop_number
         self.village = village
+
+    def serialize(self):
+        return {
+            'id': int(self.id),
+            'region': str(self.region),
+            'name': str(self.name),
+            'stop_number': int(self.stop_number),
+            'village': str(self.village)
+        }

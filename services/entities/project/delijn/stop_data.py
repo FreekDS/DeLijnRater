@@ -4,6 +4,8 @@ import os
 
 from typing import List
 
+from project.utils import try_convert
+
 headers = {
     'Ocp-Apim-Subscription-Key': os.getenv("DE_LIJN_API_KEY")
 }
@@ -49,13 +51,7 @@ def format_stop(raw_stop: dict) -> dict:
     return formatted
 
 
-def convert(val):
-    constructors = [int, str]
-    for c in constructors:
-        try:
-            return c(val)
-        except ValueError:
-            pass
+
 
 
 def get_stop_data(debug=True) -> List[dict]:
@@ -71,7 +67,7 @@ def get_stop_data(debug=True) -> List[dict]:
                     result.append(d.copy())
                 else:
                     contents = line.split(' ', 1)
-                    d[''.join(contents[0].split())] = convert(''.join(contents[1].split()))
+                    d[''.join(contents[0].split())] = try_convert(''.join(contents[1].split()))
 
         return result
     try:
