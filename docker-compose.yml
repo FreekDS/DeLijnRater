@@ -38,6 +38,22 @@ services:
     depends_on:
       - users-db
 
+  ratings:
+    build:
+      context: services/ratings
+      dockerfile: Dockerfile
+    volumes:
+      - './services/ratings:/usr/src/ratings'
+    ports:
+      - 5004:5005
+    expose:
+      - 5005
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.Config
+      - DATABASE_URL=postgres://postgres:postgres@persistence-db:5432/ratings
+    depends_on:
+      - persistence-db
 
 
   persistence-db:
