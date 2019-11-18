@@ -97,7 +97,7 @@ services:
       - 3007:3000
     environment:
       - NODE_ENV=development
-      - REACT_APP_ENTITIES_SERVICE_URL=http://localhost
+      - REACT_APP_ENTITIES_SERVICE_URL=http://localhost/api
       - CHOKIDAR_USEPOLLING=true
     depends_on:
       - entities

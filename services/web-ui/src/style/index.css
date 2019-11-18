@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.dataTables_filter {
+  float: right;
+  margin-right: 5vh;
+}
