@@ -54,7 +54,6 @@ class StopList extends React.Component {
         axios.get(base + "/entities/stops")
             .then((res) => {
                 const stops = res.data;
-                console.log(stops);
                 let rows = [];
                 stops.forEach((s) => {
                     let stop = {
@@ -69,7 +68,7 @@ class StopList extends React.Component {
                 this.setState({rows})
             })
             .catch(err => {
-                console.log({err})
+                console.error({err})
             })
     }
 
@@ -80,7 +79,6 @@ class StopList extends React.Component {
             rows: rows,
             columns: columns
         };
-        console.log("Data", data);
         return <React.Fragment>
             {loading ? "loading" : <MDBDataTable
                 data={data}

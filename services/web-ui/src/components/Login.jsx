@@ -3,10 +3,20 @@ import {AuthContext} from "./auth/authentication";
 import withAuthentication from "./auth/authentication";
 import {Redirect} from "react-router-dom";
 import * as routes from './routing/routes'
+import axios from 'axios';
 
-const LoginScreen = (props) => <React.Fragment>
-    Login screen eeuj
-</React.Fragment>;
+// TODO login form
+const LoginScreen = (props) => {
+    return (
+        <form onSubmit={props.login} method={"post"}>
+            <label htmlFor={"username"}>Username</label>
+            <input id="username" name="username" type={"username"}/>
+            <label htmlFor={"password"}>Password</label>
+            <input id="password" name="password" type={"password"}/>
+            <input type={"submit"}/>
+        </form>
+    );
+};
 
 
 class Login extends React.Component {
@@ -16,11 +26,21 @@ class Login extends React.Component {
             new_user: null
         };
 
-        this.login_user = this.login_user.bind(this);
+        this.handle_login = this.handle_login.bind(this);
     }
 
-    login_user(event) {
-        console.log("Testje");
+    handle_login(event) {
+        event.preventDefault();
+        console.log("Testje", event);
+        const username = event.target.username.value;
+        const password = event.target.password.value;
+        let base = process.env.REACT_APP_API_URL;
+        axios.post(base + "/users/login", {username: username, password: password}).then(
+            (res) => {
+                const new_user = res.data;
+                this.setState({new_user})
+            }
+        ).catch(err => console.error({err}))
     }
 
     render() {
@@ -31,7 +51,7 @@ class Login extends React.Component {
                     ? <Redirect to={routes.FrontPage}/>
                     : (new_user
                         ? auth.perform_login(new_user) && <Redirect to={routes.FrontPage}/>
-                        : <LoginScreen login={this.login_user}/>)}
+                        : <LoginScreen login={this.handle_login}/>)}
             </AuthContext.Consumer>
         );
     }

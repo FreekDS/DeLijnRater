@@ -1,4 +1,5 @@
 from flask_restful import Resource, reqparse
+from flask_restful.utils import cors
 from project import db
 from project.models.User import User
 
@@ -18,17 +19,23 @@ class Login(Resource):
             args = login_parser.parse_args()
             password = args["password"]
             username = args["username"]
-            logged_user = User.query(name=username).first()
+            logged_user = User.query.filter_by(name=username).first()
             if logged_user is None:
-                create_error(403, "User with username '{}' does not exist".format(username))
+                return create_error(403, "User with username '{}' does not exist".format(username)), 403
             if logged_user.password != password:
-                create_error(403, 'Password incorrect')
+                return create_error(403, "Password is incorrect"), 403
             return {
                        'status': 'success',
                        'user:': logged_user.serialize()
                    }, 200
         except Exception as e:
-            create_error(500, "Cannot sign in", extra=e.__str__())
+            return create_error(500, "Cannot sign in", extra=e.__str__()), 500
+
+
+class GetTest(Resource):
+    def get(self, username):
+        user = User.query.filter_by(password=username).first()
+        return user.serialize(), 200
 
 
 class Register(Resource):
@@ -43,4 +50,4 @@ class Register(Resource):
             db.session.commit()
             return user, 201
         except Exception as e:
-            create_error(500, "Cannot register", extra=e.__str__())
+            return create_error(500, "Cannot register", extra=e.__str__()), 500
