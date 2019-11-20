@@ -43,14 +43,23 @@ const withAuthentication = (Component) => {
 
         /**
          * Performs the Login using the restful API.
-         * @param event {event}
+         * @param event {Event}
          * @param toggle_loading {function}
+         * @param register_data {object}
          */
-        perform_login(event, toggle_loading) {
+        perform_login(event, toggle_loading, register_data = null) {
             event.preventDefault();
             toggle_loading(true);
-            const username = event.target.username.value;
-            const password = event.target.password.value;
+            let username;
+            let password;
+            if(register_data) {
+                username = register_data.username;
+                password = register_data.password;
+            }
+            else {
+                username = event.target.username.value;
+                password = event.target.password.value;
+            }
             let base = process.env.REACT_APP_API_URL;
             axios.post(base + "/users/login", {username: username, password: password}).then(
                 async (res) => {
@@ -78,15 +87,32 @@ const withAuthentication = (Component) => {
 
         /**
          * Performs the register function with the restful API
-         * @param event {event}
+         * @param event {Event}
          * @param toggle_loading {function}
          */
         perform_register(event, toggle_loading) {
+            toggle_loading(true);
+            event.preventDefault();
+            const {username, email, password} = event.target;
+            let base = process.env.REACT_APP_API_URL;
 
+            const params = {
+                username: username.value,
+                email: email.value,
+                password: password.value
+            };
+
+            axios.post(base + "/users/register", params).then(() => {
+                let event = new Event('click');
+                this.perform_login(event, toggle_loading, params);
+            })
+                .catch(err => {
+                    console.error({err});
+                    toggle_loading(false);
+                });
         }
 
         render() {
-
             const auth = {
                 user: this.state.authenticated_user,
                 login_function: this.perform_login,

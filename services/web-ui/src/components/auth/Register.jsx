@@ -43,7 +43,6 @@ class Register extends React.Component {
     }
 
     set_register_state(loading, error = null) {
-        console.log("Toggle loading");
         if (error) {
             this.setState({error: error.message})
         }

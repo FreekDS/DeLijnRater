@@ -41,7 +41,6 @@ class Login extends React.Component {
     }
 
     set_login_state(loading, error = null) {
-        console.log("Toggle loading");
         if (error) {
             this.setState({error: error.message})
         }
