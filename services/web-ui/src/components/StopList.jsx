@@ -1,6 +1,8 @@
 import React from "react";
 import {MDBDataTable} from 'mdbreact';
 import axios from 'axios'
+import {withRouter} from "react-router-dom";
+import * as routes from './routing/routes'
 
 class StopList extends React.Component {
     constructor(props) {
@@ -16,6 +18,7 @@ class StopList extends React.Component {
 
     handleClick(stop) {
         console.log("Event", stop);
+        this.props.history.push(routes.StopList + "/" + stop.id);
     }
 
     componentDidMount() {
@@ -92,4 +95,4 @@ class StopList extends React.Component {
 
 }
 
-export default StopList;
+export default withRouter(StopList);

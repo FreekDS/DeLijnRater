@@ -1,4 +1,5 @@
 from flask_restful import Resource, reqparse
+from sqlalchemy import func
 from project import db
 from project.utils import create_error, try_convert
 from project.models.StopRating import StopRating
@@ -41,3 +42,17 @@ class StopRatingByCreator(Resource):
             create_error(500, "Cannot convert id '{}' to integer".format(c_id))
         ratings = StopRating.query.filter_by(created_by=c_id).all()
         return [r.serialize() for r in ratings]
+
+
+class StopAverage(Resource):
+    def get(self, s_id):
+        s_id = try_convert(s_id)
+        if type(s_id) is not int:
+            create_error(500, "Cannot convert id '{}' to integer".format(s_id))
+        average = db.session.query(func.avg(StopRating.rating)).filter_by(stop_id=s_id).scalar()
+        if not average:
+            return "No ratings yet"
+        return try_convert(average), 200
+
+    # TODO change create error
+

@@ -67,7 +67,7 @@ def get_stop_data(debug=True) -> List[dict]:
                     result.append(d.copy())
                 else:
                     contents = line.split(' ', 1)
-                    d[''.join(contents[0].split())] = try_convert(''.join(contents[1].split()))
+                    d[''.join(contents[0].split())] = try_convert(contents[1])
 
         return result
     try:

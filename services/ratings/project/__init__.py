@@ -14,6 +14,8 @@ def create_app(script_info=None):
     app.config.from_object(app_settings)
 
     # Register blueprints here
+    from project.api import api_blueprint
+    app.register_blueprint(api_blueprint)
 
     with app.app_context():
         from project.models.VehicleRating import VehicleRating
