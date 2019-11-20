@@ -38,18 +38,18 @@ class RateVehicle(Resource):
             creator = args['created_by']
             rating = VehicleRating(rating, VehicleType(v_type), v_id, creator)
             if rating is None:
-                create_error(500, "Cannot create vehicle rating")
+                return create_error(500, "Cannot create vehicle rating"), 500
             db.session.add(rating)
             return rating.serialize(), 201
         except Exception as e:
-            create_error(500, "cannot create rating for vehicle", extra=e.__str__())
+            return create_error(500, "cannot create rating for vehicle", extra=e.__str__()), 500
 
 
 class RatingByVehicleID(Resource):
     def get(self, v_id):
         v_id = try_convert(v_id)
         if type(v_id) is not int:
-            create_error(500, "Cannot convert id '{}' to integer".format(v_id))
+            return create_error(500, "Cannot convert id '{}' to integer".format(v_id)), 500
         ratings = VehicleRating.query.filter_by(id=v_id).all()
         return [r.serialize() for r in ratings], 200
 
@@ -58,6 +58,6 @@ class VehicleRatingByCreator(Resource):
     def get(self, c_id):
         c_id = try_convert(c_id)
         if type(c_id) is not int:
-            create_error(500, "Cannot convert id '{}' to integer".format(c_id))
+            return create_error(500, "Cannot convert id '{}' to integer".format(c_id)), 500
         ratings = VehicleRating.query.filter_by(created_by=c_id).all()
         return [r.serialize() for r in ratings]

@@ -35,10 +35,10 @@ class StopById(Resource):
         try:
             s_id = int(s_id)
         except Exception as e:
-            create_error(500, "Cannot convert id '{}' to integer".format(s_id), extra=e.__str__())
+            return create_error(500, "Cannot convert id '{}' to integer".format(s_id), extra=e.__str__()), 500
         stop = Stop.query.filter_by(id=s_id).first()
         if stop is None:
-            create_error(404, "Stop with id {} does not exist".format(s_id))
+            return create_error(404, "Stop with id {} does not exist".format(s_id)), 404
         return stop.serialize(), 200
 
 
@@ -51,16 +51,17 @@ class StopsByRegion(Resource):
                 if region is None:
                     raise ValueError("Cannot convert int to Region")
             except Exception as e:
-                create_error(500, "Region {} does not exist. For possible values make http request to /regions/values"
-                             .format(region), extra=e.__str__())
+                return create_error(500,
+                                    "Region {} does not exist. For possible values make http request to /regions/values"
+                                    .format(region), extra=e.__str__()), 500
         else:
             try:
                 region = Region[region.upper()]
                 if region is None:
                     raise ValueError("Cannot convert string to Region")
             except Exception as e:
-                create_error(500, "Region {} does not exist. For possible values, make http request to /regions/values"
-                             .format(region), extra=e.__str__())
+                return create_error(500, "Region {} does not exist. For possible values, make http request to /regions/values"
+                             .format(region), extra=e.__str__()), 500
 
         stops = Stop.query.filter_by(region=region).all()
         return [s.serialize() for s in stops], 200

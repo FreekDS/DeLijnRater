@@ -26,19 +26,19 @@ class RateStop(Resource):
 
             rating = StopRating(rating, s_id, creator)
             if rating is None:
-                create_error(500, "Cannot create stop rating")
+                return create_error(500, "Cannot create stop rating"), 500
             db.session.add(rating)
             db.session.commit()
             return rating.serialize(), 201
         except Exception as e:
-            create_error(500, "cannot create rating for stop", extra=e.__str__())
+            return create_error(500, "cannot create rating for stop", extra=e.__str__()), 500
 
 
 class RatingByStopID(Resource):
     def get(self, s_id):
         s_id = try_convert(s_id)
         if type(s_id) is not int:
-            create_error(500, "Cannot convert id '{}' to integer".format(s_id))
+            return create_error(500, "Cannot convert id '{}' to integer".format(s_id)), 500
         ratings = StopRating.query.filter_by(id=s_id).all()
         return [r.serialize() for r in ratings], 200
 
@@ -47,7 +47,7 @@ class StopRatingByCreator(Resource):
     def get(self, c_id):
         c_id = try_convert(c_id)
         if type(c_id) is not int:
-            create_error(500, "Cannot convert id '{}' to integer".format(c_id))
+            return create_error(500, "Cannot convert id '{}' to integer".format(c_id)), 500
         ratings = StopRating.query.filter_by(created_by=c_id).all()
         return [r.serialize() for r in ratings]
 
@@ -56,11 +56,8 @@ class StopAverage(Resource):
     def get(self, s_id):
         s_id = try_convert(s_id)
         if type(s_id) is not int:
-            create_error(500, "Cannot convert id '{}' to integer".format(s_id))
+            return create_error(500, "Cannot convert id '{}' to integer".format(s_id)), 500
         average = db.session.query(func.avg(StopRating.rating)).filter_by(stop_id=s_id).scalar()
         if not average:
             return "No ratings yet"
         return float(average), 200
-
-    # TODO change create error
-

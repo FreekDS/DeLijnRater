@@ -46,7 +46,7 @@ class AllVehicles(Resource):
             db.session.commit()
             return vehicle.serialize(), 201
         except Exception as e:
-            create_error(500, "Unable to create vehicle with specified arguments", extra=e.__str__())
+            return create_error(500, "Unable to create vehicle with specified arguments", extra=e.__str__()), 500
 
 
 class VehicleById(Resource):
@@ -54,23 +54,23 @@ class VehicleById(Resource):
         try:
             v_id = int(v_id)
         except Exception as e:
-            create_error(500, "Cannot convert id '{}' to integer".format(v_id), extra=e.__str__())
+            return create_error(500, "Cannot convert id '{}' to integer".format(v_id), extra=e.__str__()), 500
 
         vehicle = Vehicle.query.filter_by(id=v_id).first()
         if vehicle is None:
-            create_error(404, "Vehicle with id {} does not exist".format(v_id))
+            return create_error(404, "Vehicle with id {} does not exist".format(v_id)), 404
         return vehicle.serialize(), 200
 
     def delete(self, v_id):
         try:
             v_id = int(v_id)
         except Exception as e:
-            create_error(500, "Cannot convert id '{}' to integer".format(v_id), extra=e.__str__())
+            return create_error(500, "Cannot convert id '{}' to integer".format(v_id), extra=e.__str__()), 500
 
         vehicle = Vehicle.query.filter_by(id=v_id).first()
 
         if vehicle is None:
-            create_error(404, "vehicle with id '{}' not found".format(v_id), extra=e.__str__())
+            return create_error(404, "vehicle with id '{}' not found".format(v_id)), 404
 
         db.session.delete(vehicle)
         db.session.commit()
@@ -82,7 +82,7 @@ class VehicleByCreator(Resource):
         try:
             c_id = int(c_id)
         except Exception as e:
-            create_error(500, "Cannot convert id '{}' to integer".format(c_id), extra=e.__str__())
+            return create_error(500, "Cannot convert id '{}' to integer".format(c_id), extra=e.__str__()), 500
 
         vehicles = Vehicle.query.filter_by(created_by=c_id).all()
         return [v.serialize() for v in vehicles]

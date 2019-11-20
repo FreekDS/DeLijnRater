@@ -1,5 +1,3 @@
-from flask_restful import abort
-
 
 def try_convert(val):
     constructors = [int, str]
@@ -10,7 +8,6 @@ def try_convert(val):
             pass
 
 
-# TODO update to better thingy
 def create_error(status, message, extra=None):
     status_dict = {
         404: "Not Found",
