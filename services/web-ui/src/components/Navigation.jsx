@@ -1,6 +1,6 @@
 import React from 'react'
 import * as routes from './routing/routes'
-import {BrowserRouter as Router, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {AuthContext} from "./auth/authentication";
 
 export const Navigation = () => (

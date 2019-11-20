@@ -13,7 +13,6 @@ import Detail from "./Detail";
 class App extends React.Component {
 
     render() {
-        console.log(routes.Login);
         return (
             <div className="App">
                 <Router>

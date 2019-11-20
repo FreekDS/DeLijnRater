@@ -2,21 +2,63 @@ import React from "react";
 import axios from "axios";
 import {withRouter} from "react-router-dom";
 import {AuthContext} from "./auth/authentication";
+import * as routes from './routing/routes'
 
 
 class Rater extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            current: 5
+        };
+
+        this.handle_change = this.handle_change.bind(this);
+        this.handle_rate_submit = this.handle_rate_submit.bind(this);
+    }
+
+    handle_rate_submit(event) {
+        event.preventDefault();
+
+        if(this.props.type === "stop") {
+            const rating = event.target.rating.value;
+            const object_id = event.target.object.value;
+            const user_id = event.target.user.value;
+
+            const params = {
+                "stop_id": object_id,
+                "created_by": user_id,
+                "rating": rating
+            };
+            const base = process.env.REACT_APP_API_URL;
+            axios.post(base + "/ratings/stops/rating", params)
+                .then(res => console.log(res))
+                .catch(err => console.error({err}))
+
+        }
+    }
+
+    handle_change(event) {
+        this.setState({current: event.target.value});
     }
 
     render() {
+        const {current} = this.state;
         return (
             <React.Fragment>
                 <AuthContext.Consumer>
                     {auth => auth.user
-                        ? <button>jeps</button>
-                        : <small>Log in to give a rating!</small>
+                        ? <React.Fragment>
+                            <div>Rate {current}</div>
+                            <form onSubmit={(event => this.handle_rate_submit(event))}>
+                                <input type={"hidden"} value={this.props.object.id} id={"object"} name={"object"}/>
+                                <input type={"hidden"} value={auth.user.id} id={"user"} name={"user"}/>
+                                <input type={"range"} min={0} max={10} className={"slider"} id={"rating"} step={0.5} name={"rating"}
+                                       onChange={this.handle_change} defaultValue={5}
+                                />
+                                <input type={"submit"} value={"Rate " + this.props.type}/>
+                            </form>
+                        </React.Fragment>
+                        : <small><a href={routes.Login}>Log in</a> to give a rating!</small>
                     }
                 </AuthContext.Consumer>
             </React.Fragment>
@@ -41,7 +83,6 @@ class Detail extends React.Component {
     componentDidMount() {
         const {type} = this.props;
         const {params} = this.props.match;
-        console.log(this.props);
         this.setState({type});
         this.getObject(type, params);
     }
@@ -55,7 +96,7 @@ class Detail extends React.Component {
     }
 
     getVehicle(id, type) {
-        const base = process.env.REACT_APP_API_URL;
+        //const base = process.env.REACT_APP_API_URL;
         // TODO
     }
 
@@ -63,14 +104,12 @@ class Detail extends React.Component {
         const base = process.env.REACT_APP_API_URL;
         axios.get(base + "/entities/stops/id/" + id.toString())
             .then((res) => {
-                console.log("Fetched object", res.data);
                 this.setState({object: res.data});
             })
             .catch(err => console.error({err}));
 
         axios.get(base + "/ratings/stops/average/" + id)
             .then((res) => {
-                console.log("Fetched rating", res.data);
                 this.setState({avg_rating: res.data});
             })
             .catch(err => console.error({err}));
@@ -82,7 +121,7 @@ class Detail extends React.Component {
 
     render() {
 
-        const {object, avg_rating} = this.state;
+        const {object, avg_rating, type} = this.state;
 
         return (
             <div>
@@ -92,7 +131,7 @@ class Detail extends React.Component {
                         <h1>{object.name}</h1>
                         {object.village && <h4>{object.village}</h4>}
                         <p>Rating: {avg_rating ? avg_rating : "NaN"}</p>
-                        <Rater object={object}/>
+                        <Rater object={object} type={type}/>
                     </React.Fragment>
 
                     : <p>loading</p>

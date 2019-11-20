@@ -1,6 +1,5 @@
 import React from 'react'
 import axios from "axios";
-import {withRouter} from "react-router-dom";
 
 export const AuthContext = React.createContext(null);
 
@@ -8,8 +7,6 @@ const withAuthentication = (Component) => {
     return class auth extends React.Component {
         constructor(props) {
             super(props);
-
-            console.log("Calling constructor");
 
             this.state = {
                 authenticated_user: null
@@ -23,18 +20,19 @@ const withAuthentication = (Component) => {
         componentDidMount() {
 
             // Reset local storage after one hour
-            let hours = 1;
-            let start_time = parseInt(localStorage.getItem('start_time'), 10);
-            if(start_time && (new Date().getTime() - start_time > hours * 60 *60 *1000))
-                localStorage.clear();
-            if(!start_time)
-                localStorage.setItem('start_time', new Date().getTime().toString(10));
-
-            const stored_user = JSON.parse(localStorage.getItem('user'));
-            console.log("stored user is", stored_user);
-            if(stored_user) {
-                this.setState({authenticated_user: stored_user});
-            }
+            // let hours = 1;
+            // let start_time = parseInt(localStorage.getItem('start_time'), 10);
+            // if(start_time && (new Date().getTime() - start_time > hours * 60 *60 *1000))
+            //     localStorage.clear();
+            // if(!start_time)
+            //     localStorage.setItem('start_time', new Date().getTime().toString(10));
+            //
+            // // localStorage.clear();
+            //
+            // const stored_user = JSON.parse(localStorage.getItem('user'));
+            // if(stored_user) {
+            //     this.setState({authenticated_user: stored_user});
+            // }
         }
 
         /**
@@ -51,7 +49,7 @@ const withAuthentication = (Component) => {
             axios.post(base + "/users/login", {username: username, password: password}).then(
                 async (res) => {
                     const new_user = res.data;
-                    await this.setState({authenticated_user: new_user});
+                    await this.setState({authenticated_user: new_user.user});
                     localStorage.setItem('user', JSON.stringify(new_user));
                     toggle_loading(false);
                 }
@@ -64,7 +62,6 @@ const withAuthentication = (Component) => {
         perform_logout() {
             const {authenticated_user} = this.state;
             console.assert(authenticated_user !== undefined && authenticated_user !== null);
-            console.log("Logging out");
             this.setState({authenticated_user: null});
             localStorage.removeItem('user');
         }
@@ -87,9 +84,7 @@ const withAuthentication = (Component) => {
                 register_function: this.perform_register
             };
 
-            if(!auth.user) {
-                console.log("strange")
-            }
+            console.log(auth.user);
 
             return (<AuthContext.Provider value={auth}>
                 <Component />
