@@ -9,6 +9,19 @@ import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {Logout} from "./auth/Logout";
 import Register from "./auth/Register";
 import Detail from "./Detail";
+import {PrivateRoute} from "./routing/PrivateRoute";
+import Profile from "./Profile";
+
+
+// TODO per user rating
+// TODO select stops by village
+// TODO select stops by line number
+// TODO remove vehicle
+// TODO create vehicle
+// TODO vehicle detail page
+// TODO documentation
+// TODO report
+
 
 class App extends React.Component {
 
@@ -30,6 +43,7 @@ class App extends React.Component {
                                        render={({match}) => <Detail match={match} type={"vehicle"}/>}/>
                                 <Route path={routes.StopList + "/:id"}
                                        render={({match}) => <Detail match={match} type={"stop"}/>}/>
+                                <PrivateRoute path={routes.Profile} component={Profile}/>
                             </Switch>
                         </div>
                     </div>

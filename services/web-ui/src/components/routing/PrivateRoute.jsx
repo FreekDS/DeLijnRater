@@ -7,7 +7,7 @@ export const PrivateRoute = ({component: Component, ...rest}) => (
     <Route {...rest} render={(props) => (
         <AuthContext.Consumer>
             {auth => auth.user
-                ? <Component {...props} />
+                ? <Component {...props} authenticated_user={auth.user} />
                 : <Redirect to={routes.FrontPage} />
             }
         </AuthContext.Consumer>

@@ -20,19 +20,25 @@ const withAuthentication = (Component) => {
         componentDidMount() {
 
             // Reset local storage after one hour
-            // let hours = 1;
-            // let start_time = parseInt(localStorage.getItem('start_time'), 10);
-            // if(start_time && (new Date().getTime() - start_time > hours * 60 *60 *1000))
-            //     localStorage.clear();
-            // if(!start_time)
-            //     localStorage.setItem('start_time', new Date().getTime().toString(10));
-            //
-            // // localStorage.clear();
-            //
-            // const stored_user = JSON.parse(localStorage.getItem('user'));
-            // if(stored_user) {
-            //     this.setState({authenticated_user: stored_user});
-            // }
+            let hours = 1;
+            let start_time = parseInt(localStorage.getItem('start_time'), 10);
+            if(start_time && (new Date().getTime() - start_time > hours * 60 *60 *1000))
+                localStorage.clear();
+            if(!start_time)
+                localStorage.setItem('start_time', new Date().getTime().toString(10));
+
+            // localStorage.clear();
+
+            const stored_user = {
+                "id": parseInt(localStorage.getItem('uid'), 10),
+                "email": localStorage.getItem('email'),
+                "name": localStorage.getItem('name')
+            };
+
+
+            if(stored_user.id && stored_user.email && stored_user.name) {
+                this.setState({authenticated_user: stored_user});
+            }
         }
 
         /**
@@ -50,7 +56,9 @@ const withAuthentication = (Component) => {
                 async (res) => {
                     const new_user = res.data;
                     await this.setState({authenticated_user: new_user.user});
-                    localStorage.setItem('user', JSON.stringify(new_user));
+                    localStorage.setItem('uid', new_user.user.id);
+                    localStorage.setItem('email', new_user.user.email);
+                    localStorage.setItem('name', new_user.user.name);
                     toggle_loading(false);
                 }
             ).catch(err => {
@@ -63,7 +71,9 @@ const withAuthentication = (Component) => {
             const {authenticated_user} = this.state;
             console.assert(authenticated_user !== undefined && authenticated_user !== null);
             this.setState({authenticated_user: null});
-            localStorage.removeItem('user');
+            localStorage.removeItem('uid');
+            localStorage.removeItem('name');
+            localStorage.removeItem('email');
         }
 
         /**
@@ -83,8 +93,6 @@ const withAuthentication = (Component) => {
                 logout_function: this.perform_logout,
                 register_function: this.perform_register
             };
-
-            console.log(auth.user);
 
             return (<AuthContext.Provider value={auth}>
                 <Component />

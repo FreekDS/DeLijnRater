@@ -20,12 +20,14 @@ export const Navigation = () => (
                     <div className={"col float-left"}>
                         <NavLink className={"nav-normal"} to={routes.StopList}>Stop ratings</NavLink>
                         <NavLink className={"nav-normal"} to={routes.VehicleList}>Vehicle ratings</NavLink>
-                        {/*<NavLink className={""} to={"/test"}>Profile</NavLink>*/}
+                        {auth.user
+                            ? <NavLink className={"nav-normal"} to={"/profile"}>Profile</NavLink>
+                            : <React.Fragment />}
                     </div>
                     <div className={"col-1 float-right"}>
                         {auth.user
-                            ? <NavLink className={"nav-login nav-item"} to={"/logout"}>Logout</NavLink>
-                            : <NavLink className="nav-login nav-item" to={"/login"}>Login</NavLink>
+                            ? <NavLink className={"nav-login nav-item"} to={routes.Logout}>Logout</NavLink>
+                            : <NavLink className="nav-login nav-item" to={routes.Login}>Login</NavLink>
                         }
                     </div>
                 </div>

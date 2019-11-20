@@ -6,7 +6,7 @@ class StopRating(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     stop_id = db.Column(db.Integer, nullable=False)
     created_by = db.Column(db.Integer, nullable=False)
-    rating = db.Column(db.Integer, nullable=False, default=0)
+    rating = db.Column(db.Float, nullable=False, default=0)
 
     def __init__(self, rating, stop_id, created_by):
         self.stop_id = stop_id

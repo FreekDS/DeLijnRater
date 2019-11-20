@@ -26,7 +26,7 @@ class Login(Resource):
                 return create_error(403, "Password is incorrect"), 403
             return {
                        'status': 'success',
-                       'user:': logged_user.serialize()
+                       'user': logged_user.serialize()
                    }, 200
         except Exception as e:
             return create_error(500, "Cannot sign in", extra=e.__str__()), 500

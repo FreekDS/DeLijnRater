@@ -31,9 +31,9 @@ class Rater extends React.Component {
             };
             const base = process.env.REACT_APP_API_URL;
             axios.post(base + "/ratings/stops/rating", params)
-                .then(res => console.log(res))
-                .catch(err => console.error({err}))
+                .catch(err => console.error({err}));
 
+            this.props.update(object_id);
         }
     }
 
@@ -78,6 +78,7 @@ class Detail extends React.Component {
         };
 
         this.handle_back_btn = this.handle_back_btn.bind(this);
+        this.getStop = this.getStop.bind(this);
     }
 
     componentDidMount() {
@@ -115,6 +116,7 @@ class Detail extends React.Component {
             .catch(err => console.error({err}));
     }
 
+
     handle_back_btn() {
         this.props.history.goBack();
     }
@@ -131,7 +133,7 @@ class Detail extends React.Component {
                         <h1>{object.name}</h1>
                         {object.village && <h4>{object.village}</h4>}
                         <p>Rating: {avg_rating ? avg_rating : "NaN"}</p>
-                        <Rater object={object} type={type}/>
+                        <Rater object={object} type={type} update={this.getStop}/>
                     </React.Fragment>
 
                     : <p>loading</p>

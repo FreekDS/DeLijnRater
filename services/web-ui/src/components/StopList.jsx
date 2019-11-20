@@ -17,7 +17,6 @@ class StopList extends React.Component {
     }
 
     handleClick(stop) {
-        console.log("Event", stop);
         this.props.history.push(routes.StopList + "/" + stop.id);
     }
 
