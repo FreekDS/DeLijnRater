@@ -24,3 +24,23 @@ The web ui service provides an interface for the user to access the application.
 The last two services are databases. One is used for persistence data, this are the entities and the ratings, and the other one is the users database.
 
 ## API structure
+The API's can be accessed in two ways. Each section below shows the two possible URL's to access the Restful resources.
+
+### Entities service
+
+### Rating service
+
+### User service
+
+## Design choices
+
+## Dependencies
+<strong>Entity service</strong>
+
+<strong>Rating service</strong>
+
+<strong>User service</strong>
+
+<strong>Databases</strong>
+
+<strong>Reversed proxy</strong>
