@@ -32,9 +32,15 @@ class Login(Resource):
             return create_error(500, "Cannot sign in", extra=e.__str__()), 500
 
 
-class GetTest(Resource):
-    def get(self, username):
-        user = User.query.filter_by(password=username).first()
+class UserByID(Resource):
+    def get(self, u_id):
+        try:
+            u_id = int(u_id)
+        except Exception as e:
+            return create_error(500, "Cannot convert id '{}' to integer".format(u_id))
+        user = User.query.filter_by(u_id=u_id).first()
+        if user is None:
+            return None, 404
         return user.serialize(), 200
 
 

@@ -26,7 +26,7 @@ stop_arg_parser.add_argument('village', type=str, help='Village of the stop', re
 
 class AllStops(Resource):
     def get(self):
-        data = Stop.query.all()
+        data = Stop.query.limit(500).all()
         return jsonify([o.serialize() for o in data])
 
 
@@ -64,3 +64,16 @@ class StopsByRegion(Resource):
 
         stops = Stop.query.filter_by(region=region).all()
         return [s.serialize() for s in stops], 200
+
+
+class StopsByVillage(Resource):
+    def get(self, village):
+        stops = Stop.query.filter_by(village=village).all()
+        return [s.serialize() for s in stops]
+
+
+class StopsByLineNumber(Resource):
+    def get(self, region, line_number):
+        # TODO
+        # use https://api.delijn.be/DLKernOpenData/api/v1/lijnen/{entiteitnummer}/{lijnnummer}/lijnrichtingen/{richting}/haltes
+        pass

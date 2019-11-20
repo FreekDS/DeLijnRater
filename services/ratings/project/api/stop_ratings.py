@@ -17,10 +17,18 @@ class RateStop(Resource):
             rating = args['rating']
             s_id = args['stop_id']
             creator = args['created_by']
+
+            old_rating = StopRating.query.filter_by(stop_id=s_id, created_by=creator).first()
+            if old_rating:
+                old_rating.rating = rating
+                db.session.commit()
+                return old_rating.serialize(), 201
+
             rating = StopRating(rating, s_id, creator)
             if rating is None:
                 create_error(500, "Cannot create stop rating")
             db.session.add(rating)
+            db.session.commit()
             return rating.serialize(), 201
         except Exception as e:
             create_error(500, "cannot create rating for stop", extra=e.__str__())
@@ -52,7 +60,7 @@ class StopAverage(Resource):
         average = db.session.query(func.avg(StopRating.rating)).filter_by(stop_id=s_id).scalar()
         if not average:
             return "No ratings yet"
-        return try_convert(average), 200
+        return float(average), 200
 
     # TODO change create error
 

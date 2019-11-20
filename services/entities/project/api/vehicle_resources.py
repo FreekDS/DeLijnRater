@@ -60,3 +60,29 @@ class VehicleById(Resource):
         if vehicle is None:
             create_error(404, "Vehicle with id {} does not exist".format(v_id))
         return vehicle.serialize(), 200
+
+    def delete(self, v_id):
+        try:
+            v_id = int(v_id)
+        except Exception as e:
+            create_error(500, "Cannot convert id '{}' to integer".format(v_id), extra=e.__str__())
+
+        vehicle = Vehicle.query.filter_by(id=v_id).first()
+
+        if vehicle is None:
+            create_error(404, "vehicle with id '{}' not found".format(v_id), extra=e.__str__())
+
+        db.session.delete(vehicle)
+        db.session.commit()
+        return "success", 200
+
+
+class VehicleByCreator(Resource):
+    def get(self, c_id):
+        try:
+            c_id = int(c_id)
+        except Exception as e:
+            create_error(500, "Cannot convert id '{}' to integer".format(c_id), extra=e.__str__())
+
+        vehicles = Vehicle.query.filter_by(created_by=c_id).all()
+        return [v.serialize() for v in vehicles]
