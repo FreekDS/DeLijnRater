@@ -26,7 +26,7 @@ stop_arg_parser.add_argument('village', type=str, help='Village of the stop', re
 
 class AllStops(Resource):
     def get(self):
-        data = Stop.query.limit(500).all()
+        data = Stop.query.all()
         return jsonify([o.serialize() for o in data])
 
 

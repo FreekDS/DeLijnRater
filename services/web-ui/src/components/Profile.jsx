@@ -8,10 +8,16 @@ class Profile extends React.Component {
         super(props);
         this.state = {
             vehicles: []
-        }
+        };
+
+        this.removeVehicle = this.removeVehicle.bind(this);
     }
 
     componentDidMount() {
+        this.update();
+    }
+
+    update() {
         const {authenticated_user} = this.props;
         const base = process.env.REACT_APP_API_URL;
         axios.get(base + "/entities/vehicles/creator/" + authenticated_user.id)
@@ -26,7 +32,7 @@ class Profile extends React.Component {
                 data.forEach(v => {
                     promises.push(axios.get(base + "/ratings/vehicles/rating/" + v.id)
                         .then(res => {
-                            if(res.data.length === 0) {
+                            if (res.data.length === 0) {
                                 vehicles.push(v);
                             }
                         })
@@ -43,6 +49,32 @@ class Profile extends React.Component {
 
             })
             .catch(err => console.error({err}))
+    }
+
+    removeVehicle(event) {
+        event.preventDefault();
+        const id = parseInt(event.target.id.value, 10);
+        const {vehicles} = this.state;
+        const base = process.env.REACT_APP_API_URL;
+        let ids = vehicles.map(obj => obj.id);
+
+
+        console.log([2].includes(2));
+
+        console.log("hallo", id);
+        if (ids.includes(id) === true) {
+            console.log("hallo");
+            axios.delete(base + "/entities/vehicles/id/" + id).then(
+                res => {
+                    console.log("res", res);
+                    this.update();
+                }
+            )
+                .catch(err => console.error("Cannot delete", {err}))
+        }
+
+
+        console.log("Sanity check", ids);
     }
 
     render() {
@@ -66,7 +98,7 @@ class Profile extends React.Component {
                         <NumberList data={vehicles}/>
                     </div>
                     <div className={"col"}>
-                        remove field
+                        <RemoveForm submit={this.removeVehicle}/>
                     </div>
                 </div>
             </React.Fragment>
@@ -76,7 +108,6 @@ class Profile extends React.Component {
 }
 
 const NumberList = (props) => {
-
     const [data, setData] = useState({
         columns: [
             {
@@ -126,6 +157,17 @@ const NumberList = (props) => {
             hover={false}
             searching={true}
         />
+    </React.Fragment>
+};
+
+
+const RemoveForm = (props) => {
+
+    return <React.Fragment>
+        <form onSubmit={(event) => props.submit(event)}>
+            <input type={"number"} min={1} name={"id"} id={"id"}/>
+            <input type={"submit"} value={"remove vehicle"}/>
+        </form>
     </React.Fragment>
 };
 

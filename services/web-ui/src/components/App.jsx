@@ -13,7 +13,6 @@ import {PrivateRoute} from "./routing/PrivateRoute";
 import Profile from "./Profile";
 
 
-// TODO select stops by line number DOING
 // TODO remove vehicle
 // TODO create vehicle
 // TODO css
