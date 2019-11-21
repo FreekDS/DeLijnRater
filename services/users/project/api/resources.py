@@ -54,6 +54,6 @@ class Register(Resource):
             user = User(username, password, email)
             db.session.add(user)
             db.session.commit()
-            return user, 201
+            return user.serialize(), 201
         except Exception as e:
             return create_error(500, "Cannot register", extra=e.__str__()), 500

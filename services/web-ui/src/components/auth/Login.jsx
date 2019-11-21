@@ -4,7 +4,6 @@ import {Redirect, withRouter} from "react-router-dom";
 import * as routes from '../routing/routes'
 import '../../style/login.css'
 
-// TODO register redirect
 const LoginScreen = (props) => {
     return (
         <div className={"login-container"}>
