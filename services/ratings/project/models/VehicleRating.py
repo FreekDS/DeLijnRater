@@ -19,13 +19,13 @@ class VehicleType(Enum):
 class VehicleRating(db.Model):
     __tablename__ = 'vehicle_ratings'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    vehicle_type = db.Column(db.Enum(VehicleType), nullable=False)
     vehicle_id = db.Column(db.Integer, nullable=False)
     created_by = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Float, nullable=False, default=0)
 
-    def __init__(self, rating, vehicle_type: VehicleType, vehicle_id, created_by):
-        self.vehicle_type = vehicle_type
+    # TODO remove vehicle type
+
+    def __init__(self, rating, vehicle_id, created_by):
         self.vehicle_id = vehicle_id
         self.created_by = created_by
         self.rating = rating
@@ -33,7 +33,6 @@ class VehicleRating(db.Model):
     def serialize(self):
         return {
             'id': self.id,
-            'vehicle_type': str(self.vehicle_type),
             'vehicle_id': self.vehicle_id,
             'created_by': self.created_by,
             'rating': self.rating

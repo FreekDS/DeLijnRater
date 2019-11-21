@@ -1,6 +1,8 @@
 import React from "react";
 import {MDBDataTable} from 'mdbreact';
 import axios from 'axios'
+import * as routes from "./routing/routes";
+import {withRouter} from "react-router-dom";
 
 class VehicleList extends React.Component {
     constructor(props) {
@@ -16,6 +18,7 @@ class VehicleList extends React.Component {
 
     handleClick(vehicle) {
         console.log("Event", vehicle);
+        this.props.history.push(routes.VehicleList + "/" + vehicle.type.toLowerCase() + "/" + vehicle.id);
     }
 
     componentDidMount() {
@@ -86,4 +89,4 @@ class VehicleList extends React.Component {
 
 }
 
-export default VehicleList;
+export default withRouter(VehicleList);

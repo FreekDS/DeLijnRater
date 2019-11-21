@@ -20,23 +20,29 @@ class Rater extends React.Component {
     handle_rate_submit(event) {
         event.preventDefault();
 
-        if (this.props.type === "stop") {
-            const rating = event.target.rating.value;
-            const object_id = event.target.object.value;
-            const user_id = event.target.user.value;
+        let url = String();
+        if (this.props.type === "stop")
+            url = "/ratings/stops/rating";
+        if (this.props.type === "vehicle")
+            url = "/ratings/vehicles/rating";
 
-            const params = {
-                "stop_id": object_id,
-                "created_by": user_id,
-                "rating": rating
-            };
-            const base = process.env.REACT_APP_API_URL;
-            axios.post(base + "/ratings/stops/rating", params)
-                .then(() => this.props.update(object_id))
-                .catch(err => console.error({err}));
+        const rating = event.target.rating.value;
+        const object_id = event.target.object.value;
+        const user_id = event.target.user.value;
 
-        }
+        const params = {
+            "entity_id": object_id,
+            "created_by": user_id,
+            "rating": rating
+        };
+
+        const base = process.env.REACT_APP_API_URL;
+        axios.post(base + url, params)
+            .then(() => this.props.update(object_id))
+            .catch(err => console.error({err}));
+
     }
+
 
     handle_change(event) {
         this.setState({current: event.target.value});
@@ -100,8 +106,8 @@ class UserRatings extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevProps !== this.props) {
-            if(this.props.update === true)
+        if (prevProps !== this.props) {
+            if (this.props.update === true)
                 this.updateRows()
         }
     }
@@ -109,15 +115,20 @@ class UserRatings extends React.Component {
     updateRows() {
         const base = process.env.REACT_APP_API_URL;
         const {id} = this.props.object;
-        if (this.props.type === "stop") {
-            axios.get(base + "/ratings/stops/rating/" + id)
-                .then(
-                    res => {
-                        this.addUserNames(res.data);
-                    }
-                )
-                .catch(err => console.error({err}));
-        }
+        let url = String();
+        if (this.props.type === "stop")
+            url = "/ratings/stops/rating/";
+        if (this.props.type === "vehicle")
+            url = "/ratings/vehicles/rating/";
+
+        axios.get(base + url + id)
+            .then(
+                res => {
+                    this.addUserNames(res.data);
+                }
+            )
+            .catch(err => console.error({err}));
+
     }
 
     addUserNames(array) {
@@ -137,7 +148,7 @@ class UserRatings extends React.Component {
                 .catch(err => console.error({err}))
             );
         });
-        Promise.all(promises).then(res => {
+        Promise.all(promises).then(() => {
             this.setState({rows})
         })
             .catch(err => console.error({err}));
@@ -164,6 +175,7 @@ class UserRatings extends React.Component {
                         noBottomColumns={true}
                         hover={true}
                         searching={false}
+                        sortable={false}
                     />
                 }
             </React.Fragment>);
@@ -198,12 +210,7 @@ class Detail extends React.Component {
             this.getStop(params.id);
         }
         if (type === "vehicle")
-            this.getVehicle(params.id, params.type)
-    }
-
-    getVehicle(id, type) {
-        //const base = process.env.REACT_APP_API_URL;
-        // TODO
+            this.getVehicle(params.id)
     }
 
     getStop(id) {
@@ -217,10 +224,30 @@ class Detail extends React.Component {
         this.updateRating(id);
     }
 
+    getVehicle(id) {
+        //const base = process.env.REACT_APP_API_URL;
+        const base = process.env.REACT_APP_API_URL;
+        axios.get(base + "/entities/vehicles/id/" + id)
+            .then(
+                res => {
+                    this.setState({object: res.data})
+                }
+            )
+            .catch(res => console.error({res}));
+
+        this.updateRating(id);
+    }
+
     updateRating(id) {
         this.setState({require_update: true});
         const base = process.env.REACT_APP_API_URL;
-        axios.get(base + "/ratings/stops/average/" + id)
+        const {type} = this.props;
+        let url = String();
+        if (type === "stop")
+            url = "/ratings/stops/average/";
+        if (type === "vehicle")
+            url = "/ratings/vehicles/average/";
+        axios.get(base + url + id)
             .then((res) => {
                 this.setState({avg_rating: res.data, require_update: false});
             })
@@ -243,9 +270,10 @@ class Detail extends React.Component {
                     <React.Fragment>
                         <h1>{object.name}</h1>
                         {object.village && <h4>{object.village}</h4>}
-                        <p>Rating: {avg_rating ? avg_rating : "NaN"}</p>
+                        {type === "vehicle" && <h4>{object.type}</h4>}
+                        <p>Rating: {avg_rating ? avg_rating.toFixed(1) : "NaN"}</p>
                         <Rater object={object} type={type} update={this.updateRating}/>
-                        <UserRatings object={object} type={type} update={require_update} />
+                        <UserRatings object={object} type={type} update={require_update}/>
                     </React.Fragment>
 
                     : <p>loading</p>

@@ -5,7 +5,7 @@ from project.utils import create_error, try_convert
 from project.models.StopRating import StopRating
 
 parser = reqparse.RequestParser()
-parser.add_argument('stop_id', required=True, type=int, help="ID of the stop in the persistence database")
+parser.add_argument('entity_id', required=True, type=int, help="ID of the stop in the persistence database")
 parser.add_argument('created_by', required=True, type=int, help="User ID of the creator")
 parser.add_argument('rating', required=True, type=float, help="Score the user gave the stop")
 
@@ -15,7 +15,7 @@ class RateStop(Resource):
         try:
             args = parser.parse_args()
             rating = args['rating']
-            s_id = args['stop_id']
+            s_id = args['entity_id']
             creator = args['created_by']
 
             old_rating = StopRating.query.filter_by(stop_id=s_id, created_by=creator).first()
@@ -39,7 +39,7 @@ class RatingByStopID(Resource):
         s_id = try_convert(s_id)
         if type(s_id) is not int:
             return create_error(500, "Cannot convert id '{}' to integer".format(s_id)), 500
-        ratings = StopRating.query.filter_by(id=s_id).all()
+        ratings = StopRating.query.filter_by(stop_id=s_id).all()
         return [r.serialize() for r in ratings], 200
 
 
