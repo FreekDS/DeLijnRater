@@ -60,8 +60,9 @@ class StopsByRegion(Resource):
                 if region is None:
                     raise ValueError("Cannot convert string to Region")
             except Exception as e:
-                return create_error(500, "Region {} does not exist. For possible values, make http request to /regions/values"
-                             .format(region), extra=e.__str__()), 500
+                return create_error(500,
+                                    "Region {} does not exist. For possible values, make http request to /regions/values"
+                                    .format(region), extra=e.__str__()), 500
 
         stops = Stop.query.filter_by(region=region).all()
         return [s.serialize() for s in stops], 200
@@ -75,6 +76,20 @@ class StopsByVillage(Resource):
 
 class StopsByLineNumber(Resource):
     def get(self, region, line_number):
-        # TODO
-        # use https://api.delijn.be/DLKernOpenData/api/v1/lijnen/{entiteitnummer}/{lijnnummer}/lijnrichtingen/{richting}/haltes
-        pass
+        from project.delijn.stops_by_line import get_delijn_stopNumberByLine
+        import click
+        region = try_convert(region)
+        if type(region) is int:
+            region = Region(region)
+        if type(region) is str:
+            region = Region[region.upper()]
+        stop_numbers = get_delijn_stopNumberByLine(region, line_number)
+        click.echo("Got {} amount of items".format(len(stop_numbers)))
+        result = list()
+        for number in stop_numbers:
+            stop = Stop.query.filter_by(stop_number=number, region=region).first()
+            if stop:
+                result.append(stop)
+        if len(result) == 0:
+            return [], 200
+        return [s.serialize() for s in result], 200

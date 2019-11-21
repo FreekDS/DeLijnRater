@@ -261,7 +261,12 @@ class Detail extends React.Component {
 
     render() {
 
-        const {object, avg_rating, type, require_update} = this.state;
+        const {object, type, require_update} = this.state;
+        let {avg_rating} = this.state;
+
+        if(typeof (avg_rating) !== typeof (10)) {
+            avg_rating = null;
+        }
 
         return (
             <div>
@@ -271,7 +276,7 @@ class Detail extends React.Component {
                         <h1>{object.name}</h1>
                         {object.village && <h4>{object.village}</h4>}
                         {type === "vehicle" && <h4>{object.type}</h4>}
-                        <p>Rating: {avg_rating ? avg_rating.toFixed(1) : "NaN"}</p>
+                        <p>Rating: {avg_rating ? avg_rating.toFixed(1) : "0"}</p>
                         <Rater object={object} type={type} update={this.updateRating}/>
                         <UserRatings object={object} type={type} update={require_update}/>
                     </React.Fragment>

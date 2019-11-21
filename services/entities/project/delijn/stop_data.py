@@ -42,19 +42,20 @@ def make_lijn_request(request_type, url, params=None):
         print("Error :'(", e.__str__())
 
 
-def format_stop(raw_stop: dict) -> dict:
+def format_stop(raw_stop: dict) -> dict or None:
     formatted = dict()
     formatted['region'] = int(raw_stop.get('entiteitnummer'))
     formatted['number'] = int(raw_stop.get('haltenummer'))
     formatted['village'] = raw_stop.get('omschrijvingGemeente')
     formatted['name'] = raw_stop.get('omschrijving')
+
+    if not formatted["village"] or not formatted["name"] or not formatted["region"] or not formatted["number"]:
+        return None
+
     return formatted
 
 
-
-
-
-def get_stop_data(debug=True) -> List[dict]:
+def get_stop_data(debug=False) -> List[dict]:
     if debug:
         result = list()
         d = dict()
@@ -71,10 +72,13 @@ def get_stop_data(debug=True) -> List[dict]:
 
         return result
     try:
-        raw_data = make_lijn_request("GET", "DLKernOpenData/api/v1/haltes")
-        result = List[dict]
+        raw_data, status = make_lijn_request("GET", "DLKernOpenData/api/v1/haltes")
+        raw_data = raw_data.get("haltes")
+        result = list()
         for raw_stop in raw_data:
-            result.append(format_stop(raw_stop))
+            stop = format_stop(raw_stop)
+            if stop:
+                result.append(stop)
         return result
     except Exception as e:
         raise e
