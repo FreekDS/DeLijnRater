@@ -5,5 +5,4 @@ export const StopList = "/stops";
 export const VehicleList = "/vehicles";
 export const Logout = "/logout";
 export const Profile = "/profile";
-export const RateVehicle = "/rate/vehicle";
-export const RateStop = "/rate/stop";
+export const CreateVehicle = "/create";

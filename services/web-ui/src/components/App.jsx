@@ -11,10 +11,10 @@ import Register from "./auth/Register";
 import Detail from "./Detail";
 import {PrivateRoute} from "./routing/PrivateRoute";
 import Profile from "./Profile";
+import {VehicleCreate} from "./VehicleCreate";
 
 
-// TODO remove vehicle
-// TODO create vehicle
+// TODO create vehicle TEST
 // TODO css
 // TODO documentation
 // TODO report doing
@@ -41,6 +41,7 @@ class App extends React.Component {
                                 <Route path={routes.StopList + "/:id"}
                                        render={({match}) => <Detail match={match} type={"stop"}/>}/>
                                 <PrivateRoute path={routes.Profile} component={Profile}/>
+                                <PrivateRoute path={routes.CreateVehicle} component={VehicleCreate}/>
                             </Switch>
                         </div>
                     </div>
