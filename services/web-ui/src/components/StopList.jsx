@@ -114,13 +114,17 @@ class StopList extends React.Component {
             rows: rows,
             columns: columns
         };
+
+
         return <React.Fragment>
             <SelectionForm type={"byVillage"} submit={this.getStopsByVillage}/>
             <SelectionForm type={"byLine"} submit={this.getStopsByLine}/>
             <button onClick={this.getStops}>Show all</button>
             {loading ? "loading" : <MDBDataTable
                 data={data}
-                paging={false}
+                paging={data.rows.length > 1000}
+                entries={50}
+                displayEntries={false}
                 noBottomColumns={true}
                 hover={true}
             />}
