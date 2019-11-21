@@ -13,12 +13,10 @@ import {PrivateRoute} from "./routing/PrivateRoute";
 import Profile from "./Profile";
 
 
-// TODO per user rating
-// TODO select stops by village
-// TODO select stops by line number
+// TODO select stops by village DOING
+// TODO select stops by line number DOING
 // TODO remove vehicle
 // TODO create vehicle
-// TODO vehicle detail page
 // TODO documentation
 // TODO report doing
 

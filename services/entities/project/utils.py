@@ -25,7 +25,7 @@ def create_error(status, message, extra=None):
             "status": status,
             "message": status_dict[status],
             "error": message,
-            "additional information": extra
+            "additional_information": extra
         }
 
     return {
