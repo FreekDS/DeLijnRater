@@ -75,7 +75,6 @@ class StopList extends React.Component {
         console.log("Sanity check", region, line);
         axios.get(base + "/entities/stops/line/" + region + "/" + line)
             .then(res => {
-                console.log("By line number", res.data);
                 this.updateRows(res.data);
             })
             .catch(err => console.error({err}));

@@ -23,8 +23,6 @@ class VehicleRating(db.Model):
     created_by = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Float, nullable=False, default=0)
 
-    # TODO remove vehicle type
-
     def __init__(self, rating, vehicle_id, created_by):
         self.vehicle_id = vehicle_id
         self.created_by = created_by

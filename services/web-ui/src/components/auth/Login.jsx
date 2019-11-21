@@ -1,6 +1,6 @@
 import React from "react";
 import {AuthContext} from "./authentication";
-import {Redirect, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import * as routes from '../routing/routes'
 import '../../style/login.css'
 
@@ -46,12 +46,14 @@ class Login extends React.Component {
         this.setState({loading})
     }
 
+
     render() {
         const {loading} = this.state;
+
         return (
             <AuthContext.Consumer>
                 {auth => ((auth.user !== null && !loading)
-                        ? <Redirect to={routes.FrontPage}/>
+                        ? <React.Fragment>{this.props.history.goBack()}</React.Fragment>
                         : <LoginScreen login={auth.login_function} loading={loading}
                                        loading_toggler={this.set_login_state} history={this.props.history}/>
                 )}
