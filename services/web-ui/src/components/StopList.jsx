@@ -117,8 +117,14 @@ class StopList extends React.Component {
 
 
         return <React.Fragment>
-            <SelectionForm type={"byVillage"} submit={this.getStopsByVillage}/>
-            <SelectionForm type={"byLine"} submit={this.getStopsByLine}/>
+            <div className={"row"}>
+                <div className={"col d-flex justify-content-center"}>
+                    <SelectionForm type={"byVillage"} submit={this.getStopsByVillage}/>
+                </div>
+                <div className={"col d-flex justify-content-center"}>
+                    <SelectionForm type={"byLine"} submit={this.getStopsByLine}/>
+                </div>
+            </div>
             <button onClick={this.getStops}>Show all</button>
             {loading ? "loading" : <MDBDataTable
                 data={data}
@@ -150,29 +156,41 @@ const SelectionForm = (props) => {
 
 
     return <React.Fragment>
-        {props.type === "byVillage" ? <h3>Search by village</h3> : <h3>Search by line</h3>}
-        <form onSubmit={(event => props.submit(event))}>
-            {props.type === "byVillage"
-                ? <React.Fragment>
-                    <label>Village
-                        <input type={"text"} placeholder={"Enter village ex. Oppuurs"} id={"village"} name={"village"}/>
-                    </label>
-                </React.Fragment>
-                : <React.Fragment>
-                    <label>Region
-                        <select id={"region"} name={"region"}>
-                            {Object.keys(regions).map((keyName, i) => (
-                                <option key={i} value={keyName}>{keyName}</option>
-                            ))}
-                        </select>
-                    </label>
-                    <label>Line number
-                        <input type={"number"} min={1} defaultValue={1} id={"line"} name={"line"}/>
-                    </label>
-                </React.Fragment>
-            }
-            <input type={"submit"} value={"Search"}/>
-        </form>
+        <div className={"stop-forms"}>
+            {props.type === "byVillage" ? <h3>Search by village</h3> : <h3>Search by line</h3>}
+            <form onSubmit={(event => props.submit(event))}>
+                {props.type === "byVillage"
+                    ? <React.Fragment>
+                        <div className={"form-group"}>
+                            <label>Village
+                                <input className={"form-control"} type={"text"}
+                                       placeholder={"Enter village ex. Oppuurs"}
+                                       id={"village"} name={"village"}/>
+                            </label>
+                        </div>
+                    </React.Fragment>
+                    : <React.Fragment>
+                        <div className={"form-group"}>
+                            <label>Region
+                                <select className={"form-control"} id={"region"} name={"region"}>
+                                    {Object.keys(regions).map((keyName, i) => (
+                                        <option key={i} value={keyName}>{keyName}</option>
+                                    ))}
+                                </select>
+
+                            </label>
+                        </div>
+                        <div className={"form-group"}>
+                            <label>Line number
+                                <input className={"form-control"} type={"number"} min={1} defaultValue={1} id={"line"}
+                                       name={"line"}/>
+                            </label>
+                        </div>
+                    </React.Fragment>
+                }
+                <input className={"btn btn-primary submit"} type={"submit"} value={"Search"}/>
+            </form>
+        </div>
     </React.Fragment>
 };
 
