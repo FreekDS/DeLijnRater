@@ -47,3 +47,54 @@ code {
     color: white;
     margin: 0.5rem;
 }
+
+.center-block {
+    display: inline-block;
+    margin: auto auto auto;
+    horiz-align: center;
+}
+
+.remove-form label {
+    display: block;
+}
+
+
+
+.remove-form label input, .remove-form label select {
+    display: block;
+    margin: 1rem;
+}
+
+.remove-btn {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.form-container {
+    border: 3px solid;
+    border-radius: 5%;
+}
+
+.form-container .form-group {
+    margin: 1rem;
+}
+
+.remover {
+    position: fixed;
+    padding-right: 30rem;
+}
+
+.remover h5 {
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.vehicle-create {
+    position: relative;
+    display: block;
+    margin-left: 28%;
+    margin-top: 2rem;
+}
+

@@ -11,12 +11,15 @@ def vehicle_type(value: Any) -> VehicleType:
     :param value:
     :return:
     """
+    import click
+    click.echo("Trying to convert this shit" + value)
     vehicle = try_convert(value)
     if type(vehicle) is int:
         vehicle = VehicleType(vehicle)
     else:
-        vehicle = VehicleType[vehicle]
+        vehicle = VehicleType[vehicle.upper()]
     if vehicle is None:
+        click.echo("Hmm, it is none")
         raise ValueError("Cannot convert '{}' to vehicle type".format(value))
     return vehicle
 
@@ -38,8 +41,11 @@ class AllVehicles(Resource):
         return [v.serialize() for v in data], 200
 
     def post(self):
+        import click
         try:
+            click.echo("Entering function....")
             args = parser.parse_args()
+            click.echo("Args" + args.__str__())
             vehicle = Vehicle(args.get('id'), args.get('number'), args.get('description'), args.get('type'),
                               args.get('created_by'), args.get('name'))
             db.session.add(vehicle)

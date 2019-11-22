@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from 'axios'
 import {MDBDataTable} from "mdbreact";
+import {withRouter} from 'react-router-dom'
 
 
 class Profile extends React.Component {
@@ -77,6 +78,15 @@ class Profile extends React.Component {
         console.log("Sanity check", ids);
     }
 
+    handleCreateBtn(id) {
+        this.props.history.push({
+            pathname: "/create",
+            state: {
+                user: id
+            }
+        })
+    }
+
     render() {
 
         const {vehicles} = this.state;
@@ -84,21 +94,23 @@ class Profile extends React.Component {
 
         return (
             <React.Fragment>
-                <div className={"row"}>
+                <div className={"row justify-content-center"}>
                     <div className={"col"}>
                         <h1>Profile of {this.props.authenticated_user.name} </h1>
                     </div>
-                    <div className={"col float-right align-right"}>
-                        Add vehicle button
+                    <div className={"col float-right vehicle-create"}>
+                        <button className={"vehicle-create btn btn-success"}
+                                onClick={() => this.handleCreateBtn(this.props.authenticated_user.id)}>Create vehicle
+                        </button>
                     </div>
                 </div>
                 <div className={"row"}>
-                    <div className={"col"}>
+                    <div className={"col-5"}>
                         <h4>Your vehicles</h4>
                         <NumberList data={vehicles}/>
                     </div>
-                    <div className={"col"}>
-                        <RemoveForm submit={this.removeVehicle}/>
+                    <div className={"col-2-offset-2 center-block"}>
+                        <RemoveForm className={"login-container"} submit={this.removeVehicle}/>
                     </div>
                 </div>
             </React.Fragment>
@@ -163,12 +175,20 @@ const NumberList = (props) => {
 
 const RemoveForm = (props) => {
 
-    return <React.Fragment>
-        <form onSubmit={(event) => props.submit(event)}>
-            <input type={"number"} min={1} name={"id"} id={"id"}/>
-            <input type={"submit"} value={"remove vehicle"}/>
-        </form>
-    </React.Fragment>
+    return (
+        <div className={"remover"}>
+            <h5>Remove a vehicle</h5>
+            <div className={"form-container"}>
+                <form className={"remove-form"} onSubmit={(event) => props.submit(event)}>
+                    <div className={"form-group"}>
+                        <label>Unique identifier
+                            <input type={"number"} min={1} name={"id"} id={"id"}/>
+                        </label>
+                    </div>
+                    <input className={"remove-btn btn btn-danger"} type={"submit"} value={"remove vehicle"}/>
+                </form>
+            </div>
+        </div>);
 };
 
-export default Profile;
+export default withRouter(Profile);

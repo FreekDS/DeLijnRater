@@ -11,10 +11,10 @@ import Register from "./auth/Register";
 import Detail from "./Detail";
 import {PrivateRoute} from "./routing/PrivateRoute";
 import Profile from "./Profile";
-import {VehicleCreate} from "./VehicleCreate";
+import VehicleCreate from "./VehicleCreate";
 
 
-// TODO create vehicle TEST
+// TODO if time, error handling
 // TODO css
 // TODO documentation
 // TODO report doing
@@ -40,8 +40,8 @@ class App extends React.Component {
                                        render={({match}) => <Detail match={match} type={"vehicle"}/>}/>
                                 <Route path={routes.StopList + "/:id"}
                                        render={({match}) => <Detail match={match} type={"stop"}/>}/>
+                                <Route path={routes.CreateVehicle} exact render={() => <VehicleCreate/>} />
                                 <PrivateRoute path={routes.Profile} component={Profile}/>
-                                <PrivateRoute path={routes.CreateVehicle} component={VehicleCreate}/>
                             </Switch>
                         </div>
                     </div>
