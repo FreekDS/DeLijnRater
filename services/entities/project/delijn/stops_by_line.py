@@ -6,6 +6,12 @@ import click
 
 
 def get_delijn_stopNumberByLine(region, line):
+    """
+    Makes a request to the API of de lijn to get all stops based on the line
+    :param region: region of the line
+    :param line: line number of the line
+    :return: list of unformatted stops
+    """
     try:
         region = region.value
         region = try_convert(region)

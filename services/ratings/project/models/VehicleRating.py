@@ -3,6 +3,7 @@ from enum import Enum
 
 
 class VehicleType(Enum):
+    """Possible vehicle types"""
     BUS = 0
     TRAM = 1
 
@@ -17,6 +18,7 @@ class VehicleType(Enum):
 
 
 class VehicleRating(db.Model):
+    """Database model for vehicle ratings"""
     __tablename__ = 'vehicle_ratings'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     vehicle_id = db.Column(db.Integer, nullable=False)

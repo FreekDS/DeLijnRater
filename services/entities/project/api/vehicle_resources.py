@@ -8,8 +8,8 @@ from project import db
 def vehicle_type(value: Any) -> VehicleType:
     """
     Tries to convert the value to a VehicleType
-    :param value:
-    :return:
+    :param value: value to convert
+    :return: VehicleType object
     """
     import click
     click.echo("Trying to convert this shit" + value)
@@ -36,16 +36,22 @@ parser.add_argument('created_by', required=True, help="Creator user id", type=in
 
 
 class AllVehicles(Resource):
+    """Get all vehicles of the database or post a new vehicle"""
     def get(self):
+        """
+        Gets all vehicles of the database
+        :return list of json objects
+        """
         data = Vehicle.query.all()
         return [v.serialize() for v in data], 200
 
     def post(self):
-        import click
+        """
+        Add a new vehicle to the database
+        :return: the created vehicle
+        """
         try:
-            click.echo("Entering function....")
             args = parser.parse_args()
-            click.echo("Args" + args.__str__())
             vehicle = Vehicle(args.get('id'), args.get('number'), args.get('description'), args.get('type'),
                               args.get('created_by'), args.get('name'))
             db.session.add(vehicle)
@@ -56,7 +62,13 @@ class AllVehicles(Resource):
 
 
 class VehicleById(Resource):
+    """Get or delete the vehicle with specified id"""
     def get(self, v_id):
+        """
+        Get the vehicle with the specified id
+        :param v_id: id of the vehicle to search for
+        :return: vehicle object with specified id
+        """
         try:
             v_id = int(v_id)
         except Exception as e:
@@ -68,6 +80,11 @@ class VehicleById(Resource):
         return vehicle.serialize(), 200
 
     def delete(self, v_id):
+        """
+        Delete a vehicle with the specified id
+        :param v_id: id of the vehicle
+        :return: "success" if vehicle is deleted
+        """
         try:
             v_id = int(v_id)
         except Exception as e:
@@ -84,7 +101,13 @@ class VehicleById(Resource):
 
 
 class VehicleByCreator(Resource):
+    """Get the vehicle based on the ID of the creator"""
     def get(self, c_id):
+        """
+        Gets the vehicles based on the creator ID
+        :param c_id: Id of the creator
+        :return: list of vehicles created by the given creator
+        """
         try:
             c_id = int(c_id)
         except Exception as e:

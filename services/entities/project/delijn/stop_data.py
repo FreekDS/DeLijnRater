@@ -43,6 +43,11 @@ def make_lijn_request(request_type, url, params=None):
 
 
 def format_stop(raw_stop: dict) -> dict or None:
+    """
+    Formats a stop to a more interesting format
+    :param raw_stop: unformatted stop
+    :return: formatted stop
+    """
     formatted = dict()
     formatted['region'] = int(raw_stop.get('entiteitnummer'))
     formatted['number'] = int(raw_stop.get('haltenummer'))
@@ -56,6 +61,11 @@ def format_stop(raw_stop: dict) -> dict or None:
 
 
 def get_stop_data(debug=False) -> List[dict]:
+    """
+    Get the stop data of de lijn
+    :param debug: if true, get data from txt file instead
+    :return: list of all stops
+    """
     if debug:
         result = list()
         d = dict()

@@ -35,6 +35,7 @@ class Region(Enum):
 
 
 class Stop(db.Model):
+    """This class is the database model for a stop"""
     __tablename__ = 'stops'
     id = db.Column(db.Integer, nullable=False, primary_key=True, autoincrement=True, unique=True)
     region = db.Column(db.Enum(Region), nullable=False)

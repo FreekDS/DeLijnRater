@@ -2,7 +2,11 @@ from project.utils import try_convert
 from typing import List
 
 
-def get_vehicle_data(input=None) -> List[dict]:
+def get_vehicle_data() -> List[dict]:
+    """
+    Read vehicle dummy data
+    :return: contents of dummy data file as list of objects
+    """
     result = list()
     with open('./project/delijn/dummy-vehicles.txt') as f:
         d = dict()
@@ -19,4 +23,4 @@ def get_vehicle_data(input=None) -> List[dict]:
 
 
 if __name__ == '__main__':
-    get_vehicle_data("./dummy-vehicles.txt")
+    get_vehicle_data()

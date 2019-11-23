@@ -3,6 +3,9 @@ from project import db
 
 
 class VehicleType(Enum):
+    """
+    All possible vehicle types
+    """
     BUS = 0
     TRAM = 1
 
@@ -17,6 +20,7 @@ class VehicleType(Enum):
 
 
 class Vehicle(db.Model):
+    """This class is the database model for a vehicle"""
     __tablename__ = 'vehicles'
     id = db.Column(db.Integer, primary_key=True, nullable=False, unique=True)
     number = db.Column(db.Integer, nullable=False)

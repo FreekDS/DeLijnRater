@@ -2,6 +2,7 @@ from project import db
 
 
 class StopRating(db.Model):
+    """Database model for the stop ratings"""
     __tablename__ = 'stop_ratings'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     stop_id = db.Column(db.Integer, nullable=False)

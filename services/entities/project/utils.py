@@ -1,5 +1,10 @@
 
 def try_convert(val):
+    """
+    Tries to convert a value to an integer
+    :param val: value to convert
+    :return: integer form of val, or string form of val
+    """
     constructors = [int, str]
     for c in constructors:
         try:
@@ -9,6 +14,7 @@ def try_convert(val):
 
 
 def create_error(status, message, extra=None):
+    """Creates an error message"""
     status_dict = {
         404: "Not Found",
         500: "Internal server error",
