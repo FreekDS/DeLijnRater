@@ -17,8 +17,8 @@ created_by 0
 {
 id 2
 number 21
-description Schijtbus
-name Bus met naam zeker
+description Beste bus van gans belgie
+name Bus met naam
 type 0
 created_by 1
 }

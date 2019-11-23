@@ -11,6 +11,7 @@ cli = FlaskGroup(create_app=create_app)
 
 @cli.command('reset')
 def recreate_db():
+    """Resets the database: deletes all entries and recreates the models"""
     db.drop_all()
     db.create_all()
     db.session.commit()
@@ -27,6 +28,7 @@ def _add_vehicle_samples():
 
 @cli.command("add_vehicles")
 def add_vehicle_samples():
+    """Adds vehicle samples to the database"""
     _add_vehicle_samples()
     db.session.commit()
     print("Added Vehicle samples")
@@ -41,6 +43,7 @@ def _add_stop_data():
 
 @cli.command('add_stops')
 def add_stop_data():
+    """Adds stop samples to the database"""
     _add_stop_data()
     db.session.commit()
     print("Added Stop samples")
@@ -48,6 +51,7 @@ def add_stop_data():
 
 @cli.command('fill_db')
 def fill_db():
+    """Fills the database with the stops of de lijn and dummy vehicle data"""
     _add_vehicle_samples()
     _add_stop_data()
     db.session.commit()
