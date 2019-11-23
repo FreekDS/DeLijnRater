@@ -245,13 +245,13 @@ http://localhost/api/ratings/. The second URL is provided by the reversed proxy.
 Create a new rating for a stop. If a user already gave a rating for this stop, the old rating is overwritten. If the rating was created successfully, the Flask resource returns the created rating with status code 201.
 This function needs json or form data as parameters. <br>
 
-<b>Parameters</>
-    * entity_id: integer, required: the ID of the stop to rate.
-    * created_by: integer, required: the ID of the user that created the rating.
-    * rating: float, required: the score the user gave the stop. The allowed values are in the interval [0, 10]
+<b>Parameters</b>
+* entity_id: integer, required: the ID of the stop to rate.
+* created_by: integer, required: the ID of the user that created the rating.
+* rating: float, required: the score the user gave the stop. The allowed values are in the interval [0, 10]
     
 <b>Possible errors</b>
-    * 500: the given parameters were wrong.
+* 500: the given parameters were wrong.
     
 ```
 Example URL: http://localhost:5002/stops/rating
@@ -278,7 +278,7 @@ Returns all the ratings of a given stop. If this function succeeds, it returns w
 <b>Parameters</b>
 * stop_id: integer: id of the stop to give the ratings for
 
-<b>Possible errors </b>
+<b>Possible errors</b>
 * 500: the given stop_id could not be converted to an integer.
 
 ```
@@ -327,13 +327,13 @@ TODO
 Create a new rating for a vehicle. If a user already gave a rating for this vehicle, the old rating is overwritten. If the rating was created successfully, the Flask resource returns the created rating with status code 201.
 This function needs json or form data as parameters. <br>
 
-<b>Parameters</>
-    * entity_id: integer, required: the ID of the vehicle to rate.
-    * created_by: integer, required: the ID of the user that created the rating.
-    * rating: float, required: the score the user gave the stop. The allowed values are in the interval [0, 10]
+<b>Parameters</b>
+* entity_id: integer, required: the ID of the vehicle to rate.
+* created_by: integer, required: the ID of the user that created the rating.
+* rating: float, required: the score the user gave the stop. The allowed values are in the interval [0, 10]
     
 <b>Possible errors</b>
-    * 500: the given parameters were wrong.
+* 500: the given parameters were wrong.
     
 ```
 Example URL: http://localhost:5002/vehicles/rating
