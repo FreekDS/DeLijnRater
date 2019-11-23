@@ -1,0 +1,17 @@
+.create-form-container {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.create-form {
+    margin-top: 2rem;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: left;
+}
+
+.form-title {
+    margin-bottom: 1rem;
+}

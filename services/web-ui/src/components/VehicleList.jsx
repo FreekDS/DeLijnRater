@@ -77,6 +77,7 @@ class VehicleList extends React.Component {
             columns: columns
         };
         return <React.Fragment>
+            <h1>List of all vehicles</h1>
             {loading ? "loading" : <MDBDataTable
                 data={data}
                 paging={false}

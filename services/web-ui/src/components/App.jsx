@@ -15,7 +15,6 @@ import VehicleCreate from "./VehicleCreate";
 
 
 // TODO if time, error handling
-// TODO css
 // TODO documentation
 // TODO report doing
 
