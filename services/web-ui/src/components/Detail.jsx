@@ -4,6 +4,8 @@ import {withRouter} from "react-router-dom";
 import {AuthContext} from "./auth/authentication";
 import * as routes from './routing/routes'
 import {MDBDataTable} from 'mdbreact';
+import '../style/rater.css'
+import '../assets/location.png'
 
 
 class Rater extends React.Component {
@@ -165,18 +167,25 @@ class UserRatings extends React.Component {
             columns
         };
 
+        let no_data = true;
+        if (!loading && data.rows.length > 0) {
+            no_data = false;
+        }
+
         return (
             <React.Fragment>
                 {loading
                     ? <p>Loading...</p>
-                    : <MDBDataTable
-                        data={data}
-                        paging={false}
-                        noBottomColumns={true}
-                        hover={true}
-                        searching={false}
-                        sortable={false}
-                    />
+                    : (no_data ? <small/>
+                        : < MDBDataTable
+                            data={data}
+                            paging={false}
+                            noBottomColumns={true}
+                            hover={true}
+                            searching={false}
+                            sortable={false}
+                        />)
+
                 }
             </React.Fragment>);
     }
@@ -264,13 +273,13 @@ class Detail extends React.Component {
         const {object, type, require_update} = this.state;
         let {avg_rating} = this.state;
 
-        if(typeof (avg_rating) !== typeof (10)) {
+        if (typeof (avg_rating) !== typeof (10)) {
             avg_rating = null;
         }
 
         return (
             <div>
-                <button onClick={this.handle_back_btn}>Go back</button>
+                <button className={"back-btn"} onClick={this.handle_back_btn}>&laquo; Back</button>
                 {object ?
                     <React.Fragment>
                         <h1>{object.name}</h1>
