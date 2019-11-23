@@ -102,3 +102,19 @@ code {
     margin-top: 1vh;
 }
 
+.btn-primary {
+    background-color: #343a40 ;
+    border-color: black;
+}
+
+.btn-primary:hover {
+    background-color: #484e54;
+    border-color: black;
+}
+
+.show-all {
+    position: absolute;
+    margin: 1.5rem auto auto;
+    z-index: 1;
+}
+

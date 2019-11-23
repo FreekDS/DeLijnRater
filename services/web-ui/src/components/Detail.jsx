@@ -8,6 +8,34 @@ import '../style/rater.css'
 import '../assets/location.png'
 
 
+const Rating = (props) => {
+
+    const rating_color = (rating) => {
+
+        if (isNaN(rating) || rating < 0) {
+            console.log("hier");
+            return "";
+        }
+
+        if (rating < 4) {
+            return "rating-worst";
+        } else if (rating <= 6.5) {
+            return "rating-medium";
+        } else {
+            return "rating-good";
+        }
+    };
+
+    return (
+        <React.Fragment>
+            {
+                <span className={"rating " + rating_color(props.rating)}>{props.rating}</span>
+            }
+        </React.Fragment>
+    )
+};
+
+
 class Rater extends React.Component {
     constructor(props) {
         super(props);
@@ -57,16 +85,22 @@ class Rater extends React.Component {
                 <AuthContext.Consumer>
                     {auth => auth.user
                         ? <React.Fragment>
-                            <div>Rate {current}</div>
-                            <form onSubmit={(event => this.handle_rate_submit(event))}>
-                                <input type={"hidden"} value={this.props.object.id} id={"object"} name={"object"}/>
-                                <input type={"hidden"} value={auth.user.id} id={"user"} name={"user"}/>
-                                <input type={"range"} min={0} max={10} className={"slider"} id={"rating"} step={0.5}
-                                       name={"rating"}
-                                       onChange={this.handle_change} defaultValue={5}
-                                />
-                                <input type={"submit"} value={"Rate " + this.props.type}/>
-                            </form>
+                            <div className={"rate-form"}>
+                                <h6>Give rating: {current}</h6>
+                                <form onSubmit={(event => this.handle_rate_submit(event))}>
+                                    <input type={"hidden"} value={this.props.object.id} id={"object"} name={"object"}/>
+                                    <input type={"hidden"} value={auth.user.id} id={"user"} name={"user"}/>
+                                    <input type={"range"} min={0} max={10} className={"slider form-control"}
+                                           id={"rating"} step={0.5}
+                                           name={"rating"}
+                                           onChange={this.handle_change} defaultValue={5}
+                                    />
+                                    <div className={"text-center"}>
+                                        <input className={"btn btn-primary btn-sm"} type={"submit"}
+                                               value={"Rate " + this.props.type}/>
+                                    </div>
+                                </form>
+                            </div>
                         </React.Fragment>
                         : <small><a href={routes.Login}>Log in</a> to give a rating!</small>
                     }
@@ -142,7 +176,7 @@ class UserRatings extends React.Component {
                 .then(res => {
                     rows.push(
                         {
-                            'rate': obj.rating,
+                            'rate': <Rating rating={obj.rating.toFixed(1)}/>,
                             'user': res.data.name
                         }
                     )
@@ -283,9 +317,16 @@ class Detail extends React.Component {
                 {object ?
                     <React.Fragment>
                         <h1>{object.name}</h1>
-                        {object.village && <h4>{object.village}</h4>}
+                        {object.village && <h4 className={"object-subtitle"}>{object.village}</h4>}
                         {type === "vehicle" && <h4>{object.type}</h4>}
-                        <p>Rating: {avg_rating ? avg_rating.toFixed(1) : "0"}</p>
+                        <hr className={"object-underline"}/>
+                        {type === "vehicle" &&
+                        <React.Fragment>
+                            <h5>Description:</h5>
+                            <p className={"vehicle-desc"}>{object.description}</p>
+                            <hr />
+                        </React.Fragment>}
+                        <p>Rating: {avg_rating ? <Rating rating={avg_rating.toFixed(1)}/> : "not rated yet"}</p>
                         <Rater object={object} type={type} update={this.updateRating}/>
                         <UserRatings object={object} type={type} update={require_update}/>
                     </React.Fragment>

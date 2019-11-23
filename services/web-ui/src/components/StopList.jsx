@@ -125,7 +125,7 @@ class StopList extends React.Component {
                     <SelectionForm type={"byLine"} submit={this.getStopsByLine}/>
                 </div>
             </div>
-            <button onClick={this.getStops}>Show all</button>
+            <button className={"btn btn-primary show-all btn-sm"} onClick={this.getStops}>Show all</button>
             {loading ? "loading" : <MDBDataTable
                 data={data}
                 paging={data.rows.length > 1000}
