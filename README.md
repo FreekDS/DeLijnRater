@@ -45,7 +45,7 @@ Each Flask service uses the same error format described below
 The entities service is visible via http://localhost:5001/. The service is also reachable using the following url:
 http://localhost/api/entities/. The second URL is provided by the reversed proxy.
 
-### GET /regions/values
+#### GET /regions/values
 This resource returns the possible values for the regions.
 ```
 Example URL: http://localhost:5001/regions/values
@@ -139,7 +139,7 @@ TODO
 ````
 
 
-### GET /vehicles/values
+#### GET /vehicles/values
 This resource returns the possible values for the vehicle types. Returns with status code 200 if it was successful.
 ```
 Example URL: http://localhost:5001/vehicles/values
@@ -238,8 +238,203 @@ TODO
 ```
 
 ### Rating service
+The rating service is visible via http://localhost:5002/. The service is also reachable using the following url:
+http://localhost/api/ratings/. The second URL is provided by the reversed proxy.
+
+#### POST /stops/rating
+Create a new rating for a stop. If a user already gave a rating for this stop, the old rating is overwritten. If the rating was created successfully, the Flask resource returns the created rating with status code 201.
+This function needs json or form data as parameters. <br>
+
+<b>Parameters</>
+    * entity_id: integer, required: the ID of the stop to rate.
+    * created_by: integer, required: the ID of the user that created the rating.
+    * rating: float, required: the score the user gave the stop. The allowed values are in the interval [0, 10]
+    
+<b>Possible errors</b>
+    * 500: the given parameters were wrong.
+    
+```
+Example URL: http://localhost:5002/stops/rating
+Example URL: http://localhost/api/ratings/stops/rating
+
+Possible parameters
+{
+    "entity_id": 1,
+    "created_by": 2,
+    "rating": 7.5
+}
+
+Result:
+{
+    "entity_id": 1,
+    "created_by": 2,
+    "rating": 7.5
+}
+```
+
+#### GET /stops/rating/{stop_id}
+Returns all the ratings of a given stop. If this function succeeds, it returns with status code 200. <br>
+
+<b>Parameters</b>
+* stop_id: integer: id of the stop to give the ratings for
+
+<b>Possible errors </b>
+* 500: the given stop_id could not be converted to an integer.
+
+```
+Example URL: http://localhost:5002/stops/rating/1
+Example URL: http://localhost/api/ratings/stops/rating/1
+
+Possible result
+TODO
+```
+
+#### GET /stops/rating/user/{user_id}
+Returns all the ratings a certain user gave. If this function succeeds, it returns with status code 200 <br>
+
+<b>Parameters</b>
+* user_id: integer: the id of the user to get the ratings of.
+
+<b>Possible errors</b>
+* 500: user_id could not be converted to integer
+
+```
+Example URL: http://localhost:5002/stops/rating/user/1
+Example URL: http://localhost/api/ratings/stops/rating/user/1
+
+Possible result
+TODO
+```
+
+#### GET /stops/average/{stop_id}
+Returns the average rating of a stop. If there are no ratings, the resource returns the string 'No ratings yet'. If this function succeeds, it returns with status code 200. <br>
+
+<b>Parameters</b>
+* stop_id: integer: id of the stop to get the average rating of.
+
+<b>Possible errors</b>
+* 500: stop_id could not be converted to integer
+
+```
+Example URL: http://localhost:5002/stops/average/1
+Example URL: http://localhost/api/ratings/stops/average/1
+
+Possible result
+TODO
+```
+
+#### POST /vehicles/rating
+Create a new rating for a vehicle. If a user already gave a rating for this vehicle, the old rating is overwritten. If the rating was created successfully, the Flask resource returns the created rating with status code 201.
+This function needs json or form data as parameters. <br>
+
+<b>Parameters</>
+    * entity_id: integer, required: the ID of the vehicle to rate.
+    * created_by: integer, required: the ID of the user that created the rating.
+    * rating: float, required: the score the user gave the stop. The allowed values are in the interval [0, 10]
+    
+<b>Possible errors</b>
+    * 500: the given parameters were wrong.
+    
+```
+Example URL: http://localhost:5002/vehicles/rating
+Example URL: http://localhost/api/ratings/vehicles/rating
+
+Possible parameters
+{
+    "entity_id": 1,
+    "created_by": 2,
+    "rating": 7.5
+}
+
+Result:
+{
+    "entity_id": 1,
+    "created_by": 2,
+    "rating": 7.5
+}
+```
+
+#### GET /vehicles/rating/{vehicle_id}
+Returns all the ratings of a given vehicle. If this function succeeds, it returns with status code 200. <br>
+
+<b>Parameters</b>
+* vehicle_id: integer: id of the vehicle to give the ratings for
+
+<b>Possible errors </b>
+* 500: the given vehicle_id could not be converted to an integer.
+
+```
+Example URL: http://localhost:5002/stops/rating/1
+Example URL: http://localhost/api/ratings/stops/rating/1
+
+Possible result
+TODO
+```
+
+#### GET /stops/vehicle/user/{user_id}
+Returns all the ratings a certain user gave. If this function succeeds, it returns with status code 200 <br>
+
+<b>Parameters</b>
+* user_id: integer: the id of the user to get the ratings of.
+
+<b>Possible errors</b>
+* 500: user_id could not be converted to integer
+
+```
+Example URL: http://localhost:5002/vehicles/rating/user/1
+Example URL: http://localhost/api/ratings/vehicles/rating/user/1
+
+Possible result
+TODO
+```
+
+#### GET /stops/average/{vehicle_id}
+Returns the average rating of a vehicle. If there are no ratings, the resource returns the string 'No ratings yet'. If this function succeeds, it returns with status code 200. <br>
+
+<b>Parameters</b>
+* vehicle_id: integer: id of the stop to get the average rating of.
+
+<b>Possible errors</b>
+* 500: stop_id could not be converted to integer
+
+```
+Example URL: http://localhost:5002/vehicles/average/1
+Example URL: http://localhost/api/ratings/vehicles/average/1
+
+Possible result
+TODO
+```
 
 ### User service
+The users service is visible via http://localhost:5003/. The service is also reachable using the following url:
+http://localhost/api/users/. The second URL is provided by the reversed proxy.
+
+#### POST /login
+Controls the credentials of a user. This post request needs json encoded or form data. If this function succeeds it returns with status code 200. <br>
+
+<b>Parameters</b>
+* username: string: username of the user
+* password: string: password of the user
+
+<b>Possible errors</b>
+* 403: user with given username does not exist.
+* 403: password for given username is incorrect
+* 500: an unexpected error occurred
+
+```
+Example URL: http://localhost:5003/login
+Example URL: http://localhost/api/users/login
+
+Possible parameters:
+{
+    "username": "test",
+    "password": "testpass"
+}
+
+Possible results
+TODO
+```
+
 
 ## Other services
 ### Persistence database
