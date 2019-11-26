@@ -61,7 +61,6 @@ class StopList extends React.Component {
 
         axios.get(base + "/entities/stops/village/" + village)
             .then(res => {
-                console.log("By village", res.data);
                 this.updateRows(res.data);
             })
             .catch(err => console.error({err}));
@@ -72,7 +71,6 @@ class StopList extends React.Component {
         const base = process.env.REACT_APP_API_URL;
         const line = event.target.line.value;
         const region = event.target.region.value;
-        console.log("Sanity check", region, line);
         axios.get(base + "/entities/stops/line/" + region + "/" + line)
             .then(res => {
                 this.updateRows(res.data);
@@ -174,7 +172,7 @@ const SelectionForm = (props) => {
                             <label>Region
                                 <select className={"form-control"} id={"region"} name={"region"}>
                                     {Object.keys(regions).map((keyName, i) => (
-                                        <option key={i} value={keyName}>{keyName}</option>
+                                        <option key={i} value={i+1}>{keyName}</option>
                                     ))}
                                 </select>
 
