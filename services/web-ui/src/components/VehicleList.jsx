@@ -17,7 +17,6 @@ class VehicleList extends React.Component {
     }
 
     handleClick(vehicle) {
-        console.log("Event", vehicle);
         this.props.history.push(routes.VehicleList + "/" + vehicle.type.toLowerCase() + "/" + vehicle.id);
     }
 

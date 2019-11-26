@@ -19,9 +19,9 @@ def recreate_db():
 @cli.command('fill_db')
 def seed_db():
     """Fills the database with dummy data"""
-    r1 = VehicleRating(8.0, VehicleType.BUS, 1, 1)
-    r2 = VehicleRating(3.0, VehicleType.TRAM, 2, 2)
-    r3 = StopRating(7.0, 1, 1)
+    r1 = VehicleRating(8.0, 1, 1)
+    r2 = VehicleRating(3.0, 2, 2)
+    r3 = StopRating(7.0, 1, 2)
     r4 = StopRating(5.0, 1, 1)
     db.session.add(r1)
     db.session.add(r2)

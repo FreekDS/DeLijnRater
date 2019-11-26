@@ -13,7 +13,6 @@ const Rating = (props) => {
     const rating_color = (rating) => {
 
         if (isNaN(rating) || rating < 0) {
-            console.log("hier");
             return "";
         }
 

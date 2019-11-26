@@ -39,7 +39,7 @@ class AllStops(Resource):
         :return: list of dictionaries containing all possible stops of the database
         """
         data = Stop.query.all()
-        return jsonify([o.serialize() for o in data]), 200
+        return [o.serialize() for o in data], 200
 
 
 class StopById(Resource):
