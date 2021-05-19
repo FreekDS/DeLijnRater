@@ -3,5 +3,5 @@ Flask-SQLAlchemy==2.3.2
 psycopg2==2.7.4
 Flask-Cors==3.0.9
 Flask-RESTful==0.3.7
-Jinja2==2.10.3
+Jinja2==2.11.3
 Click==7.0
